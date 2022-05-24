@@ -1,4 +1,4 @@
-package server.db;
+package com.iwaa.server.db;
 
 
 import com.iwaa.common.util.data.Coordinates;
@@ -6,13 +6,15 @@ import com.iwaa.common.util.data.Location;
 import com.iwaa.common.util.data.Route;
 import com.iwaa.common.util.db.DBWorker;
 import com.iwaa.common.util.entities.User;
-import server.utils.Encryptor;
+import com.iwaa.server.utils.Encryptor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class DBWorkerImpl implements DBWorker {
@@ -51,7 +53,7 @@ public class DBWorkerImpl implements DBWorker {
     }
 
     @Override
-    public long addRoute(Route route, User user) {
+    public long addRoute(Route route, User user) throws SQLException {
         try (Connection connection = dbConnector.connect();
              PreparedStatement addRouteToTable = connection.prepareStatement(DBQuery.INSERT_ROUTE.getQuery())
         ) {
@@ -64,13 +66,11 @@ public class DBWorkerImpl implements DBWorker {
             route.setId(routeId);
             route.setAuthor(user.getLogin());
             return routeId;
-        } catch (SQLException e) {
-            return -1;
         }
     }
 
     @Override
-    public long addUser(User user) {
+    public long addUser(User user) throws SQLException {
         try (Connection connection = dbConnector.connect();
              PreparedStatement addUserToTable = connection.prepareStatement(DBQuery.INSERT_USER.getQuery())
         ) {
@@ -82,13 +82,11 @@ public class DBWorkerImpl implements DBWorker {
             long userId = resultSet.getLong("user_id");
             user.setId(userId);
             return userId;
-        } catch (SQLException e) {
-            return -1;
         }
     }
 
     @Override
-    public long checkUser(User user) {
+    public long checkUser(User user) throws SQLException {
         try (Connection connection = dbConnector.connect();
              PreparedStatement checkUser = connection.prepareStatement(DBQuery.SELECT_USER_BY_LOGIN_AND_PASSWORD.getQuery())
         ) {
@@ -100,52 +98,43 @@ public class DBWorkerImpl implements DBWorker {
                 return resultSet.getLong("user_id");
             }
             return 0;
-        } catch (SQLException e) {
-            System.out.println("mistake");
-            return -1;
         }
     }
 
     @Override
-    public long updateRoute(Route route) {
+    public long updateRoute(Route route) throws SQLException {
         try (Connection connection = dbConnector.connect();
              PreparedStatement updateRoute = connection.prepareStatement(DBQuery.UPDATE_ROUTE.getQuery())
         ) {
             fillUpdateStatementWithRouteData(updateRoute, route);
             updateRoute.executeUpdate();
             return route.getId();
-        } catch (SQLException e) {
-            return -1;
         }
     }
 
     @Override
-    public long deleteRoutsByUser(User user) {
+    public long deleteRoutsByUser(User user) throws SQLException {
         try (Connection connection = dbConnector.connect();
              PreparedStatement deleterouteByUser = connection.prepareStatement(DBQuery.DELETE_ROUTES_BY_AUTHOR.getQuery())
         ) {
             deleterouteByUser.setString(1, user.getLogin());
             return deleterouteByUser.executeUpdate();
-        } catch (SQLException e) {
-            return -1;
         }
     }
 
     @Override
-    public long deleteRouteById(long routeId) {
+    public long deleteRouteById(long routeId) throws SQLException {
         try (Connection connection = dbConnector.connect();
-             PreparedStatement deleterouteById = connection.prepareStatement(DBQuery.DELETE_ROUTE_BY_ID.getQuery())
+             PreparedStatement deleteRouteById = connection.prepareStatement(DBQuery.DELETE_ROUTE_BY_ID.getQuery())
         ) {
-            deleterouteById.setLong(1, routeId);
-            return deleterouteById.executeUpdate();
-        } catch (SQLException e) {
-            return -1;
+            deleteRouteById.setLong(1, routeId);
+            return deleteRouteById.executeUpdate();
         }
     }
 
 
     @Override
-    public CopyOnWriteArraySet<Route> selectAllRoutes() {
+    public Set<Route> selectAllRoutes() {
         try (Connection connection = dbConnector.connect();
              PreparedStatement selectAllroutes = connection.prepareStatement(DBQuery.SELECT_ALL_ROUTES.getQuery())
         ) {
@@ -156,8 +145,8 @@ public class DBWorkerImpl implements DBWorker {
         }
     }
 
-    private CopyOnWriteArraySet<Route> parseRoutesFromResulSet(ResultSet resultSet) throws SQLException {
-        CopyOnWriteArraySet<Route> routes = new CopyOnWriteArraySet<>();
+    private Set<Route> parseRoutesFromResulSet(ResultSet resultSet) throws SQLException {
+        Set<Route> routes = ConcurrentHashMap.newKeySet();
         while (resultSet.next()) {
             routes.add(getRouteFromTable(resultSet));
         }

@@ -33,6 +33,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public final class CommandAdmin {
 
@@ -47,6 +50,7 @@ public final class CommandAdmin {
     private CollectionAdmin collectionAdmin;
     private DBWorker dbWorker;
     private CommandListener commandListener;
+    private final ReadWriteLock lock = new ReentrantReadWriteLock(true);
 
     public CommandAdmin(CollectionAdmin collectionAdmin, DBWorker dbWorker, State state) {
         this.state = state;
@@ -124,9 +128,15 @@ public final class CommandAdmin {
     }
 
     public void addCommandToHistory(String commandName) {
-        commandHistory.add(commandName);
-        if (commandHistory.size() > HISTORY_LENGTH) {
-            commandHistory.poll();
+        Lock writeLock = lock.writeLock();
+        try {
+            writeLock.lock();
+            commandHistory.add(commandName);
+            if (commandHistory.size() > HISTORY_LENGTH) {
+                commandHistory.poll();
+            }
+        } finally {
+            writeLock.unlock();
         }
     }
 

@@ -1,4 +1,4 @@
-package server.utils;
+package com.iwaa.server.utils;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;

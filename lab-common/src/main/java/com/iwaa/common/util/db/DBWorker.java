@@ -3,16 +3,17 @@ package com.iwaa.common.util.db;
 import com.iwaa.common.util.data.Route;
 import com.iwaa.common.util.entities.User;
 
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.sql.SQLException;
+import java.util.Set;
 
 public interface DBWorker {
 
-    long addRoute(Route route, User user);
-    long addUser(User user);
-    long updateRoute(Route route);
-    long checkUser(User user);
-    long deleteRoutsByUser(User user);
-    long  deleteRouteById(long routeId);
-    CopyOnWriteArraySet<Route> selectAllRoutes();
+    long addRoute(Route route, User user) throws SQLException;
+    long addUser(User user) throws SQLException;
+    long updateRoute(Route route) throws SQLException;
+    long checkUser(User user) throws SQLException;
+    long deleteRoutsByUser(User user) throws SQLException;
+    long  deleteRouteById(long routeId) throws SQLException;
+    Set<Route> selectAllRoutes();
 
 }

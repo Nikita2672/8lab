@@ -1,8 +1,8 @@
-package server.request;
+package com.iwaa.server.request;
 
 import com.iwaa.common.util.network.Request;
 import com.iwaa.common.util.network.Serializer;
-import server.channels.ChannelState;
+import com.iwaa.server.channels.ChannelState;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

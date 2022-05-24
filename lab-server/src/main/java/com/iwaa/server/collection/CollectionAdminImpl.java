@@ -1,4 +1,4 @@
-package server.collection;
+package com.iwaa.server.collection;
 
 import com.iwaa.common.util.controllers.CollectionAdmin;
 import com.iwaa.common.util.data.Route;
@@ -21,9 +21,9 @@ public class CollectionAdminImpl implements CollectionAdmin {
 
     private static final String EMPTY_MESSAGE = "Your collection is empty";
     private final ZonedDateTime creationDate = ZonedDateTime.now();
-    private CopyOnWriteArraySet<Route> routes;
+    private Set<Route> routes;
 
-    public CollectionAdminImpl(CopyOnWriteArraySet<Route> routes) {
+    public CollectionAdminImpl(Set<Route> routes) {
         this.routes = routes;
     }
 

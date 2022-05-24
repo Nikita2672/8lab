@@ -8,6 +8,7 @@ import com.iwaa.common.util.exceptions.EndOfStreamException;
 import com.iwaa.common.util.network.CommandResult;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class SignUpCommand extends AbstractCommand {
 
@@ -28,13 +29,13 @@ public class SignUpCommand extends AbstractCommand {
 
     @Override
     public CommandResult execute(Object[] args) {
-        User user = (User) args[0];
-        long result = getCommandManager().getDBWorker().addUser(user);
-        if (result <= 0) {
+        try {
+            User user = (User) args[0];
+            long result = getCommandManager().getDBWorker().addUser(user);
+            user.setId(result);
+            return new CommandResult("Signed up.", user);
+        } catch (SQLException e) {
             return new CommandResult("Failed to create a user, this login is already occupied.");
         }
-        user.setId(result);
-        return new CommandResult("Signed up.", user);
     }
-
 }

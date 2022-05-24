@@ -1,4 +1,4 @@
-package server.db;
+package com.iwaa.server.db;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,7 +12,7 @@ public class DBInitializer {
         this.dbConnector = dbConnector;
     }
 
-    public int init() {
+    public int init() throws SQLException {
 
         try (Connection connection = dbConnector.connect();
              PreparedStatement createUsersTable = connection.prepareStatement(DBQuery.CREATE_USERS_TABLE.getQuery());
@@ -21,8 +21,6 @@ public class DBInitializer {
             createUsersTable.execute();
             createRouteTable.execute();
             return 1;
-        } catch (SQLException e) {
-            return -1;
         }
     }
 }

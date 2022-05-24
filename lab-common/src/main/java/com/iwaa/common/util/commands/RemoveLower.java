@@ -8,11 +8,13 @@ import com.iwaa.common.util.network.CommandResult;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class RemoveLower extends AbstractCommand {
+
     public RemoveLower(CommandAdmin commandAdmin) {
         super(commandAdmin, "remove_lower", "удалить из коллекции все элементы, меньшие, чем заданный", 0);
     }
@@ -38,10 +40,12 @@ public class RemoveLower extends AbstractCommand {
         int collectionLen = getCommandManager().getCollectionManager().getCollection().size();
         List<Route> routesToDelete = getCommandManager().getCollectionManager().getCollection().stream().filter(route -> (Objects.equals(route.getAuthor(), user.getLogin()) && route.compareTo((Route) args[0]) < 0)).collect(Collectors.toList());
         for (Route routeToDelete : routesToDelete) {
-            if (getCommandManager().getDBWorker().deleteRouteById(routeToDelete.getId()) < 0) {
+            try {
+                getCommandManager().getDBWorker().deleteRouteById(routeToDelete.getId());
+                getCommandManager().getCollectionManager().remove(routeToDelete);
+            } catch (SQLException e) {
                 return new CommandResult("Couldn't delete because DB problems.");
             }
-            getCommandManager().getCollectionManager().remove(routeToDelete);
         }
         return new CommandResult((collectionLen - getCommandManager().getCollectionManager().getCollection().size()) + " object(s) was deleted");
     }

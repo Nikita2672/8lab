@@ -1,8 +1,10 @@
-package server.request;
+package com.iwaa.server.request;
 
 import com.iwaa.common.util.controllers.CommandAdmin;
 import com.iwaa.common.util.network.CommandResult;
 import com.iwaa.common.util.network.Request;
+
+import java.sql.SQLException;
 
 public class RequestExecutor {
 
@@ -17,12 +19,13 @@ public class RequestExecutor {
         if (commandAdmin.getCommandsWithoutAuth().containsKey(request.getCommand().getName())) {
             return commandAdmin.executeCommand(request.getCommand(), request.getArgs());
         }
-        long checkUserResult = commandAdmin.getDBWorker().checkUser(request.getUser());
-        if (checkUserResult < 0) {
+        try {
+            long checkUserResult = commandAdmin.getDBWorker().checkUser(request.getUser());
+            if (checkUserResult == 0) {
+                return new CommandResult("Sign in/up first, call \"help\" to see list of commands.");
+            }
+        } catch (SQLException e) {
             return new CommandResult("DB problems, try again later.");
-        }
-        if (checkUserResult == 0) {
-            return new CommandResult("Sign in/up first, call \"help\" to see list of commands.");
         }
         return commandAdmin.executeCommand(request.getCommand(), request.getArgs());
     }

@@ -10,6 +10,7 @@ import com.iwaa.common.util.network.CommandResult;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class Add extends AbstractCommand {
 
@@ -34,15 +35,16 @@ public class Add extends AbstractCommand {
 
     @Override
     public CommandResult execute(Object[] args) {
-        Route routeToAdd = (Route) args[0];
-        User user = (User) args[1];
-        DBWorker dbWorker = getCommandManager().getDBWorker();
-        CollectionAdmin collectionAdmin = getCommandManager().getCollectionManager();
-        long a = dbWorker.addRoute(routeToAdd, user);
-        if (a <= 0) {
+        try {
+            Route routeToAdd = (Route) args[0];
+            User user = (User) args[1];
+            DBWorker dbWorker = getCommandManager().getDBWorker();
+            CollectionAdmin collectionAdmin = getCommandManager().getCollectionManager();
+            dbWorker.addRoute(routeToAdd, user);
+            collectionAdmin.add(routeToAdd);
+            return new CommandResult("your Route was successfully added");
+        } catch (SQLException e) {
             return new CommandResult("Couldn't add route");
         }
-        collectionAdmin.add(routeToAdd);
-        return new CommandResult("your Route was successfully added");
     }
 }

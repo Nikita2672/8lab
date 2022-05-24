@@ -8,6 +8,7 @@ import com.iwaa.common.util.exceptions.EndOfStreamException;
 import com.iwaa.common.util.network.CommandResult;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class SignInCommand extends AbstractCommand {
 
@@ -28,14 +29,13 @@ public class SignInCommand extends AbstractCommand {
 
     @Override
     public CommandResult execute(Object[] args) {
-        User user = (User) args[0];
-        long result = getCommandManager().getDBWorker().checkUser(user);
-        if (result <= 0) {
+        try {
+            User user = (User) args[0];
+            long result = getCommandManager().getDBWorker().checkUser(user);
+            user.setId(result);
+            return new CommandResult("Signed in.", user);
+        } catch (SQLException e) {
             return new CommandResult("Wrong credentials.");
         }
-        user.setId(result);
-        return new CommandResult("Signed in.", user);
     }
-
-
 }

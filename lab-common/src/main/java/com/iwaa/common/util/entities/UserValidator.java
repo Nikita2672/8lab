@@ -20,7 +20,7 @@ public final class UserValidator {
             throw new IllegalArgumentException("Login must have at least 1 character.");
         }
         if (args[0].length() > MAX_LOGIN_LENGTH) {
-            throw new IllegalArgumentException("Login must have at least 1 character.");
+            throw new IllegalArgumentException("Login mustn't be more than 200 character.");
         }
         return args[0];
     }

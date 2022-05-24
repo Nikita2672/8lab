@@ -1,4 +1,4 @@
-package server.utils;
+package com.iwaa.server.utils;
 
 public interface Encryptor {
 

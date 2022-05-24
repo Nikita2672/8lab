@@ -9,6 +9,7 @@ import com.iwaa.common.util.network.Request;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class Update extends AbstractCommand {
 
@@ -48,13 +49,15 @@ public class Update extends AbstractCommand {
 
     @Override
     public CommandResult execute(Object[] args) {
+        try {
         Route updatedRoute = (Route) args[0];
         User user = (User) args[1];
         updatedRoute.setAuthor((user.getLogin()));
-        if (getCommandManager().getDBWorker().updateRoute(updatedRoute) <= 0) {
-            return new CommandResult("Couldn't update route because of DB problems.");
-        }
+        getCommandManager().getDBWorker().updateRoute(updatedRoute);
         getCommandManager().getCollectionManager().update(updatedRoute);
         return new CommandResult("Your Route was successfully Updated");
+        } catch (SQLException e) {
+            return new CommandResult("Couldn't update route because of DB problems.");
+        }
     }
 }

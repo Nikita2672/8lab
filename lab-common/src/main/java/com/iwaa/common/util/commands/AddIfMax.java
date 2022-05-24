@@ -8,6 +8,7 @@ import com.iwaa.common.util.network.CommandResult;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Collections;
 
 public class AddIfMax extends AbstractCommand {
@@ -36,7 +37,9 @@ public class AddIfMax extends AbstractCommand {
         Route newRoute = (Route) args[0];
         User user = (User) args[1];
         if (newRoute.compareTo(Collections.max(getCommandManager().getCollectionManager().getCollection())) > 0) {
-            if (getCommandManager().getDBWorker().addRoute(newRoute, user) <= 0) {
+            try {
+                getCommandManager().getDBWorker().addRoute(newRoute, user);
+            } catch (SQLException e) {
                 return new CommandResult("Couldn't add route");
             }
             getCommandManager().getCollectionManager().add(newRoute);

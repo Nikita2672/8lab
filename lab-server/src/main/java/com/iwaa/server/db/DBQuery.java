@@ -1,4 +1,4 @@
-package server.db;
+package com.iwaa.server.db;
 
 public enum DBQuery {
 

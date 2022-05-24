@@ -1,4 +1,4 @@
-package server;
+package com.iwaa.server;
 
 import com.iwaa.common.util.controllers.CollectionAdmin;
 import com.iwaa.common.util.controllers.CommandAdmin;
@@ -6,16 +6,17 @@ import com.iwaa.common.util.controllers.CommandListener;
 import com.iwaa.common.util.data.Route;
 import com.iwaa.common.util.db.DBWorker;
 import com.iwaa.common.util.state.State;
-import server.collection.CollectionAdminImpl;
-import server.db.DBConnector;
-import server.db.DBInitializer;
-import server.db.DBWorkerImpl;
-import server.request.RequestExecutor;
-import server.utils.Encryptor;
-import server.utils.MD2Encryptor;
+import com.iwaa.server.db.DBInitializer;
+import com.iwaa.server.request.RequestExecutor;
+import com.iwaa.server.collection.CollectionAdminImpl;
+import com.iwaa.server.db.DBConnector;
+import com.iwaa.server.db.DBWorkerImpl;
+import com.iwaa.server.utils.Encryptor;
+import com.iwaa.server.utils.MD2Encryptor;
 
 import java.io.IOException;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.sql.SQLException;
+import java.util.Set;
 
 public final class Server {
 
@@ -24,12 +25,13 @@ public final class Server {
     }
 
     public static void main(String[] args) {
-        DBConnector dbConnector = new DBConnector();
-        DBInitializer dbInitializer = new DBInitializer(dbConnector);
-        if (dbInitializer.init() > 0) {
+        try {
+            DBConnector dbConnector = new DBConnector();
+            DBInitializer dbInitializer = new DBInitializer(dbConnector);
+            dbInitializer.init();
             Encryptor encryptor = new MD2Encryptor();
             DBWorker dbWorker = new DBWorkerImpl(dbConnector, encryptor);
-            CopyOnWriteArraySet<Route> routes = dbWorker.selectAllRoutes();
+            Set<Route> routes = dbWorker.selectAllRoutes();
             if (routes != null) {
                 CollectionAdmin collectionAdmin = new CollectionAdminImpl(routes);
                 State state = new State();
@@ -40,15 +42,15 @@ public final class Server {
                     new Thread(new CommandListener(commandAdmin, false)).start();
                     serverConnectAdmin.run();
                 } catch (IOException e) {
-                    System.out.print("");
+                    System.out.println("The reason of exception:\n" + e.getMessage());
                 }
             }
-        } else {
+        } catch (SQLException e) {
             System.out.println("Please initialize correct local variables\n"
-                            + "HOST\n"
-                            + "DB_NAME\n"
-                            + "USER\n"
-                            + "PASSWORD");
+                    + "DB_HOST\n"
+                    + "DB_NAME\n"
+                    + "DB_USER\n"
+                    + "DB_PASSWORD");
         }
     }
 }

@@ -1,4 +1,4 @@
-package server.db;
+package com.iwaa.server.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,4 +15,5 @@ public class DBConnector {
     public Connection connect() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
+
 }

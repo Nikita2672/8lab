@@ -1,9 +1,9 @@
-package server.response;
+package com.iwaa.server.response;
 
 
 import com.iwaa.common.util.network.CommandResult;
 import com.iwaa.common.util.network.Serializer;
-import server.channels.ChannelState;
+import com.iwaa.server.channels.ChannelState;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

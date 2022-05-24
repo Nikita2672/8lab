@@ -1,12 +1,12 @@
-package server;
+package com.iwaa.server;
 
 import com.iwaa.common.util.network.Request;
 import com.iwaa.common.util.network.Serializer;
 import com.iwaa.common.util.state.State;
-import server.channels.ChannelState;
-import server.request.RequestExecutor;
-import server.request.RequestReader;
-import server.response.CommandResultSender;
+import com.iwaa.server.channels.ChannelState;
+import com.iwaa.server.request.RequestExecutor;
+import com.iwaa.server.request.RequestReader;
+import com.iwaa.server.response.CommandResultSender;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,23 +17,21 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public final class ServerConnectAdmin implements Runnable {
 
     private static final int SELECT_DELAY = 1000;
-    private final Map<SocketChannel, ByteBuffer> channels = Collections.synchronizedMap(new HashMap<>());
+    private final ConcurrentHashMap<SocketChannel, ByteBuffer> channels = new ConcurrentHashMap<>();
     private final ExecutorService executorService = Executors.newFixedThreadPool(5);
     private final Selector selector;
     private final ServerSocketChannel serverChannel;
     private final RequestExecutor requestExecutor;
-    private final Map<SocketChannel, ChannelState> channelsState = Collections.synchronizedMap(new HashMap<>());
+    private final ConcurrentHashMap<SocketChannel, ChannelState> channelsState = new ConcurrentHashMap<>();
     private final State state;
 
     public ServerConnectAdmin(RequestExecutor requestExecutor, State state) throws IOException {
@@ -128,8 +126,8 @@ public final class ServerConnectAdmin implements Runnable {
         SocketChannel channel = (SocketChannel) key.channel();
         if (channelsState.get(channel) == ChannelState.READY_TO_READ) {
             channelsState.put(channel, ChannelState.READING);
-            new Thread(new RequestReader(channel, channels, selector, channelsState))
-                    .start();
+            RequestReader requestReader = new RequestReader(channel, channels, selector, channelsState);
+            CompletableFuture.runAsync(requestReader, executorService);
         }
         if (channels.get((SocketChannel) key.channel()) == null) {
             throw new IOException();

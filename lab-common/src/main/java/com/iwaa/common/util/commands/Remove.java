@@ -6,6 +6,8 @@ import com.iwaa.common.util.entities.User;
 import com.iwaa.common.util.network.CommandResult;
 import com.iwaa.common.util.network.Request;
 
+import java.sql.SQLException;
+
 public class Remove extends AbstractCommand {
 
     public Remove(CommandAdmin commandAdmin) {
@@ -36,15 +38,16 @@ public class Remove extends AbstractCommand {
 
     @Override
     public CommandResult execute(Object[] args) {
-        long routeId = (Long) args[0];
-        long delResult = getCommandManager().getDBWorker().deleteRouteById(routeId);
-        if (delResult < 0) {
+        try {
+            long routeId = (Long) args[0];
+            long delResult = getCommandManager().getDBWorker().deleteRouteById(routeId);
+            if (delResult == 0) {
+                return new CommandResult("No route found with such id.");
+            }
+            getCommandManager().getCollectionManager().removeById(routeId);
+            return new CommandResult("Removed successfully!");
+        } catch (SQLException e) {
             return new CommandResult("Could not remove route because of DB problems.");
         }
-        if (delResult == 0) {
-            return new CommandResult("No route found with such id.");
-        }
-        getCommandManager().getCollectionManager().removeById(routeId);
-        return new CommandResult("Removed successfully!");
     }
 }
