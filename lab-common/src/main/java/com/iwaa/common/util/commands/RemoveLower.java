@@ -76,12 +76,12 @@ public class RemoveLower extends AbstractCommand {
                     getCommandManager().getDBWorker().deleteRouteById(routeToDelete.getId());
                     getCommandManager().getCollectionManager().remove(routeToDelete);
                 } catch (SQLException e) {
-                    return new CommandResult("Couldn't delete because DB problems.");
+                    return new CommandResult("Couldn't delete because DB problems.", false);
                 }
             }
-            return new CommandResult((collectionLen - getCommandManager().getCollectionManager().getCollection().size()) + " object(s) was deleted");
+            return new CommandResult((collectionLen - getCommandManager().getCollectionManager().getCollection().size()) + " object(s) was deleted", true);
         } else {
-            return new CommandResult("Data incorrect");
+            return new CommandResult("Data incorrect", false);
         }
     }
 }

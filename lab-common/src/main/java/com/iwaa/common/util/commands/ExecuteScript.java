@@ -16,7 +16,7 @@ public class ExecuteScript extends AbstractCommand {
     public CommandResult execute(Object[] args) {
         String fileName = (String) args[0];
         if (getCommandManager().getCommandListener().getFileManager().getCurrentFiles().contains(new File(fileName))) {
-            return new CommandResult("The command was ignored because it will call recursion.");
+            return new CommandResult("The command was ignored because it will call recursion.", false);
         } else {
             File file = new File(fileName);
             return getCommandManager().getCommandListener().runFile(file);

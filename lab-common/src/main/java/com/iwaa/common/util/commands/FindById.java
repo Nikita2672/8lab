@@ -19,11 +19,11 @@ public class FindById extends AbstractCommand {
         User user = (User) args[1];
         Route foundRoute = getCommandManager().getCollectionManager().findById((Long) args[0]);
         if (foundRoute.getId().equals(-1L)) {
-            return new CommandResult((String) null);
+            return new CommandResult((String) null, false);
         }
         if (!Objects.equals(foundRoute.getAuthor(), user.getLogin())) {
-            return new CommandResult("", null);
+            return new CommandResult("", null, false);
         }
-        return new CommandResult(foundRoute.currentValues(), user);
+        return new CommandResult(foundRoute.currentValues(), user, true);
     }
 }

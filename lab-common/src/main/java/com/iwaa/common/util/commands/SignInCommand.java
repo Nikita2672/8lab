@@ -36,12 +36,12 @@ public class SignInCommand extends AbstractCommand {
             long result = getCommandManager().getDBWorker().checkUser(user);
             if (result > 0) {
                 user.setId(result);
-                return new CommandResult("Signed in", user);
+                return new CommandResult("Signed in", user, true);
             } else {
-                return new CommandResult("There is no such user");
+                return new CommandResult("There is no such user", false);
             }
         } catch (SQLException e) {
-            return new CommandResult("Wrong credentials.");
+            return new CommandResult("Wrong credentials.", false);
         }
     }
 }

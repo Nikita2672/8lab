@@ -72,12 +72,12 @@ public class Add extends AbstractCommand {
                 CollectionAdmin collectionAdmin = getCommandManager().getCollectionManager();
                 dbWorker.addRoute(routeToAdd, user);
                 collectionAdmin.add(routeToAdd);
-                return new CommandResult("your Route was successfully added");
+                return new CommandResult("your Route was successfully added", true);
             } else {
-                return new CommandResult("Data incorrect");
+                return new CommandResult("Data incorrect", false);
             }
         } catch (SQLException e) {
-            return new CommandResult("Couldn't add route");
+            return new CommandResult("Couldn't add route", false);
         }
     }
 }

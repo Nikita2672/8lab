@@ -164,7 +164,7 @@ public class CommandListener implements Runnable {
             return commandResult;
         }
         Set<Route> routes = new HashSet<>();
-        return new CommandResult(routes);
+        return new CommandResult(routes, true);
     }
 
     public CommandResult runRemove(Long id) {
@@ -174,7 +174,7 @@ public class CommandListener implements Runnable {
             responseExecutor.execute();
             return commandResult;
         } else {
-            return new CommandResult("<html>There is no such Route<br>or you haven't permissions<html>");
+            return new CommandResult("<html>There is no such Route<br>or you haven't permissions<html>", false);
         }
     }
 
@@ -202,7 +202,7 @@ public class CommandListener implements Runnable {
             responseExecutor.execute();
             return commandResult;
         } else {
-            return new CommandResult("It's not your Route");
+            return new CommandResult("It's not your Route", false);
         }
     }
 
@@ -260,9 +260,9 @@ public class CommandListener implements Runnable {
                     }
                 }
             }
-            return new CommandResult(results.toString());
+            return new CommandResult(results.toString(), true);
         } catch (IOException e) {
-            return new CommandResult("There is no such file or you haven't permissions");
+            return new CommandResult("There is no such file or you haven't permissions", false);
         }
     }
 

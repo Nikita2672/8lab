@@ -14,7 +14,6 @@ import javax.swing.JTextField;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagLayout;
-import java.awt.Frame;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,8 +34,8 @@ public class FilterFrame extends AbstractFrame {
     private final JButton sendButton = new JButton(localisation(Constants.SEND));
     private final JLabel distanceLabel = new JLabel(localisation(Constants.DISTANCE_ENTER));
     private final JLabel mistakeLabel = new JLabel(localisation(Constants.MISTAKE_DISTANCE));
-    private final JFrame frame;
-    private final JPanel panel;
+    private final JFrame filterMainFrame;
+    private final JPanel filterMainPanel;
 
     {
         distanceField.setFont(FIELD_FONT);
@@ -45,14 +44,14 @@ public class FilterFrame extends AbstractFrame {
         distanceLabel.setFont(BUTTON_FONT);
         mistakeLabel.setFont(MISTAKE_FONT);
         mistakeLabel.setForeground(Color.RED);
-        frame = new JFrame(localisation(Constants.FILTER_WINDOW));
-        frame.setSize(STANDART_WIDTH_SIZE, STANDART_HEIGHT_SIZE);
-        frame.setLocationRelativeTo(null);
-        frame.setLayout(new BorderLayout());
-        panel = createPanel();
-        frame.add(panel, BorderLayout.CENTER);
-        frame.pack();
-        frame.setResizable(false);
+        filterMainFrame = new JFrame(localisation(Constants.FILTER_WINDOW));
+        filterMainFrame.setSize(STANDART_WIDTH_SIZE, STANDART_HEIGHT_SIZE);
+        filterMainFrame.setLocationRelativeTo(null);
+        filterMainFrame.setLayout(new BorderLayout());
+        filterMainPanel = createPanel();
+        filterMainFrame.add(filterMainPanel, BorderLayout.CENTER);
+        filterMainFrame.pack();
+        filterMainFrame.setResizable(false);
     }
 
     public FilterFrame(ResourceBundle resourceBundle) {
@@ -60,7 +59,7 @@ public class FilterFrame extends AbstractFrame {
     }
 
     public void startFilter(CommandListener commandListener) {
-        frame.setVisible(true);
+        filterMainFrame.setVisible(true);
         sendButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -68,36 +67,36 @@ public class FilterFrame extends AbstractFrame {
                 try {
                     distance = Long.parseLong(distanceField.getText());
                     CommandResult commandResult = commandListener.runFilter(distance);
-                    frame.dispose();
-                    JFrame jFrame = new JFrame(localisation(Constants.RESULT_FILTER));
-                    jFrame.setSize(new Dimension(BIG_WIDTH_SIZE, BIG_HEIGHT_SIZE));
-                    jFrame.setLayout(new BorderLayout());
+                    filterMainFrame.dispose();
+                    JFrame resultFilterFrame = new JFrame(localisation(Constants.RESULT_FILTER));
+                    resultFilterFrame.setSize(new Dimension(BIG_WIDTH_SIZE, BIG_HEIGHT_SIZE));
+                    resultFilterFrame.setLayout(new BorderLayout());
                     String title = localisation(Constants.TITLE) + " " + distance + "<br> <html>";
-                    JLabel result = new JLabel(title + commandResult.getMessage());
-                    result.setFont(LABEL_RESULT_FONT);
-                    jFrame.add(result, BorderLayout.CENTER);
-                    jFrame.setResizable(false);
-                    jFrame.setVisible(true);
+                    JLabel resultLabel = new JLabel(title + commandResult.getMessage());
+                    resultLabel.setFont(LABEL_RESULT_FONT);
+                    resultFilterFrame.add(resultLabel, BorderLayout.CENTER);
+                    resultFilterFrame.setResizable(false);
+                    resultFilterFrame.setVisible(true);
                 } catch (NumberFormatException exception) {
-                    showMistake(frame, panel);
+                    showMistake();
                 }
             }
         });
     }
 
-    private void showMistake(Frame jFrame, JPanel jPanel) {
-        FabricOfComponents.setLocationOfComponent(jPanel, mistakeLabel, 0, 1);
-        jFrame.add(jPanel, BorderLayout.CENTER);
-        jFrame.setVisible(true);
+    private void showMistake() {
+        FabricOfComponents.setLocationOfComponent(filterMainPanel, mistakeLabel, 0, 1);
+        filterMainFrame.add(filterMainPanel, BorderLayout.CENTER);
+        filterMainFrame.setVisible(true);
     }
 
     private JPanel createPanel() {
-        JPanel jPanel = new JPanel();
-        jPanel.setLayout(new GridBagLayout());
-        FabricOfComponents.setLocationOfComponent(jPanel, distanceLabel, 0, 0);
-        FabricOfComponents.setLocationOfComponent(jPanel, distanceField, 1, 0);
-        FabricOfComponents.setLocationOfComponent(jPanel, sendButton, 1, 1);
-        return jPanel;
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new GridBagLayout());
+        FabricOfComponents.setLocationOfComponent(mainPanel, distanceLabel, 0, 0);
+        FabricOfComponents.setLocationOfComponent(mainPanel, distanceField, 1, 0);
+        FabricOfComponents.setLocationOfComponent(mainPanel, sendButton, 1, 1);
+        return mainPanel;
     }
 
     @Override

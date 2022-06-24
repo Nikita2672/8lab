@@ -156,7 +156,7 @@ public final class CommandAdmin {
                 state.switchPerformanceStatus();
             }
         }
-        return new CommandResult("No such command, call \"help\" to see the list of commands.");
+        return new CommandResult("No such command, call \"help\" to see the list of commands.", false);
     }
 
     public CommandResult processCommand(AbstractCommand command, String[] rawArgs, User user) throws EndOfStreamException {
@@ -174,13 +174,15 @@ public final class CommandAdmin {
                 }
             }
         } else {
-            return new CommandResult("Wrong number of arguments.");
+            return new CommandResult("Wrong number of arguments.", false);
         }
         return null;
     }
 
     public CommandResult executeCommand(AbstractCommand command, Object[] args) {
-        addCommandToHistory(command.getName());
+        if (!command.getName().equals("show")) {
+            addCommandToHistory(command.getName());
+        }
         return command.execute(args);
     }
 }

@@ -22,9 +22,9 @@ public class Clear extends AbstractCommand {
         try {
             getCommandManager().getDBWorker().deleteRoutsByUser(user);
             getCommandManager().getCollectionManager().clear(user.getLogin());
-            return new CommandResult("Your routes was successfully deleted");
+            return new CommandResult("Your routes was successfully deleted", true);
         } catch (SQLException e) {
-            return new CommandResult("Could not clear routes, db problems.");
+            return new CommandResult("Could not clear routes, db problems.", false);
         }
     }
 }

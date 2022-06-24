@@ -12,7 +12,7 @@ public class Exit extends AbstractCommand {
     @Override
     public CommandResult execute(Object[] args) {
         getCommandManager().getPerformanceState().switchPerformanceStatus();
-        return new CommandResult("Shutting down.");
+        return new CommandResult("Shutting down.", true);
     }
 
 }

@@ -18,6 +18,6 @@ public class Help extends AbstractCommand {
                 .filter(value -> !(value.getName().equals("sign_in") || value.getName().equals("sign_up")
                         || value.getName().equals("exit") || value.getName().equals("update")))
                 .map(value -> value.getName() + " - " + value.getDescription())
-                .collect(Collectors.joining("<br>")) + "<html>");
+                .collect(Collectors.joining("<br>")) + "<html>", true);
     }
 }

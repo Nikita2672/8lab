@@ -70,15 +70,15 @@ public class AddIfMax extends AbstractCommand {
                 try {
                     getCommandManager().getDBWorker().addRoute(newRoute, user);
                 } catch (SQLException e) {
-                    return new CommandResult("Couldn't add route");
+                    return new CommandResult("Couldn't add route", false);
                 }
                 getCommandManager().getCollectionManager().add(newRoute);
-                return new CommandResult("New Route was successfully added!");
+                return new CommandResult("New Route was successfully added!", true);
             } else {
-                return new CommandResult("Given route is not maximal");
+                return new CommandResult("Given route is not maximal", false);
             }
         } else {
-            return new CommandResult("Data incorrect");
+            return new CommandResult("Data incorrect", false);
         }
     }
 }

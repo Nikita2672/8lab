@@ -41,12 +41,12 @@ public class Remove extends AbstractCommand {
             long routeId = (Long) args[0];
             long delResult = getCommandManager().getDBWorker().deleteRouteById(routeId);
             if (delResult == 0) {
-                return new CommandResult("No route found with such id.");
+                return new CommandResult("No route found with such id.", false);
             }
             getCommandManager().getCollectionManager().removeById(routeId);
-            return new CommandResult("Removed successfully!");
+            return new CommandResult("Removed successfully!", true);
         } catch (SQLException e) {
-            return new CommandResult("Could not remove route because of DB problems.");
+            return new CommandResult("Could not remove route because of DB problems.", false);
         }
     }
 }

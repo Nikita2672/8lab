@@ -13,17 +13,26 @@ public class CommandResult implements Serializable {
     private Collection<Route> routes;
     private User user;
 
-    public CommandResult(String message, User user) {
+    private boolean success = false;
+
+    public CommandResult(String message, User user, boolean success) {
         this.message = message;
         this.user = user;
+        this.success = success;
     }
 
-    public CommandResult(String message) {
+    public CommandResult(String message, boolean success) {
         this.message = message;
+        this.success = success;
     }
 
-    public CommandResult(Collection<Route> routes) {
+    public CommandResult(Collection<Route> routes, boolean success) {
         this.routes = routes;
+        this.success = success;
+    }
+
+    public boolean isSuccess() {
+        return success;
     }
 
     public String getMessage() {

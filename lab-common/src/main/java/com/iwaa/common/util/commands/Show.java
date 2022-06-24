@@ -12,6 +12,6 @@ public class Show extends AbstractCommand {
 
     @Override
     public CommandResult execute(Object[] args) {
-        return new CommandResult(getCommandManager().getCollectionManager().show());
+        return new CommandResult(getCommandManager().getCollectionManager().show(), true);
     }
 }

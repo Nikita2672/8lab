@@ -22,10 +22,10 @@ public class RequestExecutor {
         try {
             long checkUserResult = commandAdmin.getDBWorker().checkUser(request.getUser());
             if (checkUserResult == 0) {
-                return new CommandResult("Sign in/up first, call \"help\" to see list of commands.");
+                return new CommandResult("Sign in/up first, call \"help\" to see list of commands.", false);
             }
         } catch (SQLException e) {
-            return new CommandResult("DB problems, try again later.");
+            return new CommandResult("DB problems, try again later.", false);
         }
         return commandAdmin.executeCommand(request.getCommand(), request.getArgs());
     }

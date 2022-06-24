@@ -174,30 +174,30 @@ public class DBWorkerImpl implements DBWorker {
         return route;
     }
 
-    private void fillAddStatementWithRouteData(PreparedStatement statement, Route route) throws SQLException {
-        statement.setString(ADD_STATEMENT_NAME, route.getName());
-        statement.setFloat(ADD_STATEMENT_COORDINATE_X, route.getCoordinates().getX());
-        statement.setFloat(ADD_STATEMENT_COORDINATE_Y, route.getCoordinates().getY());
-        statement.setLong(ADD_STATEMENT_LOCATION_FROM_X, route.getFrom().getX());
-        statement.setInt(ADD_STATEMENT_LOCATION_FROM_Y, route.getFrom().getY());
-        statement.setInt(ADD_STATEMENT_LOCATION_FROM_Z, route.getFrom().getZ());
-        statement.setLong(ADD_STATEMENT_LOCATION_TO_X, route.getTo().getX());
-        statement.setInt(ADD_STATEMENT_LOCATION_TO_Y, route.getTo().getY());
-        statement.setInt(ADD_STATEMENT_LOCATION_TO_Z, route.getTo().getZ());
-        statement.setLong(ADD_STATEMENT_DISTANCE, route.getDistance());
+    private void fillAddStatementWithRouteData(PreparedStatement preparedStatement, Route route) throws SQLException {
+        preparedStatement.setString(ADD_STATEMENT_NAME, route.getName());
+        preparedStatement.setFloat(ADD_STATEMENT_COORDINATE_X, route.getCoordinates().getX());
+        preparedStatement.setFloat(ADD_STATEMENT_COORDINATE_Y, route.getCoordinates().getY());
+        preparedStatement.setLong(ADD_STATEMENT_LOCATION_FROM_X, route.getFrom().getX());
+        preparedStatement.setInt(ADD_STATEMENT_LOCATION_FROM_Y, route.getFrom().getY());
+        preparedStatement.setInt(ADD_STATEMENT_LOCATION_FROM_Z, route.getFrom().getZ());
+        preparedStatement.setLong(ADD_STATEMENT_LOCATION_TO_X, route.getTo().getX());
+        preparedStatement.setInt(ADD_STATEMENT_LOCATION_TO_Y, route.getTo().getY());
+        preparedStatement.setInt(ADD_STATEMENT_LOCATION_TO_Z, route.getTo().getZ());
+        preparedStatement.setLong(ADD_STATEMENT_DISTANCE, route.getDistance());
     }
 
-    private void fillUpdateStatementWithRouteData(PreparedStatement statement, Route route) throws SQLException {
-        statement.setString(UPDATE_STATEMENT_NAME, route.getName());
-        statement.setFloat(UPDATE_STATEMENT_COORDINATE_X, route.getCoordinates().getX());
-        statement.setFloat(UPDATE_STATEMENT_COORDINATE_Y, route.getCoordinates().getY());
-        statement.setLong(UPDATE_STATEMENT_LOCATION_FROM_X, route.getFrom().getX());
-        statement.setInt(UPDATE_STATEMENT_LOCATION_FROM_Y, route.getFrom().getY());
-        statement.setInt(UPDATE_STATEMENT_LOCATION_FROM_Z, route.getFrom().getZ());
-        statement.setLong(UPDATE_STATEMENT_LOCATION_TO_X, route.getTo().getX());
-        statement.setInt(UPDATE_STATEMENT_LOCATION_TO_Y, route.getTo().getY());
-        statement.setInt(UPDATE_STATEMENT_LOCATION_TO_Z, route.getTo().getZ());
-        statement.setLong(UPDATE_STATEMENT_DISTANCE, route.getDistance());
-        statement.setLong(UPDATE_STATEMENT_ID, route.getId());
+    private void fillUpdateStatementWithRouteData(PreparedStatement preparedStatement, Route route) throws SQLException {
+        preparedStatement.setString(UPDATE_STATEMENT_NAME, route.getName());
+        preparedStatement.setFloat(UPDATE_STATEMENT_COORDINATE_X, route.getCoordinates().getX());
+        preparedStatement.setFloat(UPDATE_STATEMENT_COORDINATE_Y, route.getCoordinates().getY());
+        preparedStatement.setLong(UPDATE_STATEMENT_LOCATION_FROM_X, route.getFrom().getX());
+        preparedStatement.setInt(UPDATE_STATEMENT_LOCATION_FROM_Y, route.getFrom().getY());
+        preparedStatement.setInt(UPDATE_STATEMENT_LOCATION_FROM_Z, route.getFrom().getZ());
+        preparedStatement.setLong(UPDATE_STATEMENT_LOCATION_TO_X, route.getTo().getX());
+        preparedStatement.setInt(UPDATE_STATEMENT_LOCATION_TO_Y, route.getTo().getY());
+        preparedStatement.setInt(UPDATE_STATEMENT_LOCATION_TO_Z, route.getTo().getZ());
+        preparedStatement.setLong(UPDATE_STATEMENT_DISTANCE, route.getDistance());
+        preparedStatement.setLong(UPDATE_STATEMENT_ID, route.getId());
     }
 }

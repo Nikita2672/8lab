@@ -70,9 +70,9 @@ public abstract class AbstractFrame implements Localized {
         return language;
     }
 
-    private void changeMenuAndLAg(JMenuItem jMenuItem) {
-        jMenuItem.addActionListener((ActionEvent e) -> {
-            setResourceBundle(Local.LOCALS.get(jMenuItem.getName()));
+    private void changeMenuAndLAg(JMenuItem langItem) {
+        langItem.addActionListener((ActionEvent e) -> {
+            setResourceBundle(Local.LOCALS.get(langItem.getName()));
             repaintFrame();
         });
     }

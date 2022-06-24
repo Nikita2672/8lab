@@ -7,7 +7,7 @@ public class Coordinates implements Serializable, Comparable<Coordinates> {
     private float x; //Максимальное значение поля: 245
     private Float y; //Максимальное значение поля: 362, Поле не может быть null
 
-    public Coordinates(Float y, float x) {
+    public Coordinates(Float x, float y) {
         this.y = y;
         this.x = x;
     }

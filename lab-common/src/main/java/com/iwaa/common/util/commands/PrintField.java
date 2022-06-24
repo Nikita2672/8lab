@@ -13,6 +13,6 @@ public class PrintField extends AbstractCommand {
 
     @Override
     public CommandResult execute(Object[] args) {
-        return new CommandResult("<html>" + getCommandManager().getCollectionManager().outFields() + "<html>");
+        return new CommandResult("<html>" + getCommandManager().getCollectionManager().outFields() + "<html>", true);
     }
 }

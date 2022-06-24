@@ -34,19 +34,15 @@ public class Listener implements MouseListener {
     private int x;
     private int y;
 
-    private Map<Route, ArrayList<Point>> mapOfHeadBoxes;
-    private ResourceBundle resourceBundle;
-    private RouteTable routeTable;
+    private final Map<Route, ArrayList<Point>> mapOfHeadBoxes;
+    private final ResourceBundle resourceBundle;
+    private final RouteTable routeTable;
 
 
     public Listener(Map<Route, ArrayList<Point>> mapOfHeadBoxes, ResourceBundle resourceBundle,
                     RouteTable routeTable) {
         this.resourceBundle = resourceBundle;
         this.routeTable = routeTable;
-        this.mapOfHeadBoxes = mapOfHeadBoxes;
-    }
-
-    public void setMapOfHeadBoxes(Map<Route, ArrayList<Point>> mapOfHeadBoxes) {
         this.mapOfHeadBoxes = mapOfHeadBoxes;
     }
 
@@ -89,7 +85,7 @@ public class Listener implements MouseListener {
             JButton update = new JButton("update");
             update.setFont(BUTTON_FONT);
             update.setBackground(Color.ORANGE);
-            addUpdateListener(frame, update);
+            addUpdateListener(frame, update, route.getId());
             FabricOfComponents.setLocationOfComponent(panel, update, 0, 1);
         }
         frame.add(panel);
@@ -98,13 +94,11 @@ public class Listener implements MouseListener {
         frame.setVisible(true);
     }
 
-    private void addUpdateListener(JFrame frame, JButton button) {
+    private void addUpdateListener(JFrame frame, JButton button, long id) {
         button.addActionListener(e -> {
             frame.dispose();
             InsertFrame insertFrame = new InsertFrame(resourceBundle);
-            insertFrame.startInsertFrame(routeTable.getCommandListenerForTable(), "update",
-                    routeTable.getRouteTableModel(), routeTable.getJpanel(), routeTable.getMainJFrame(),
-                    routeTable.getjScrollPane(), routeTable);
+            insertFrame.startInsertFrame(routeTable.getCommandListenerForTable(), "update" + " " + id, routeTable);
     });
 }
 

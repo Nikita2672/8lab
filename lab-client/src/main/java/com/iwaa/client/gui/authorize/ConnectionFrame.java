@@ -36,8 +36,8 @@ public class ConnectionFrame extends AbstractFrame {
     private final JTextField portField = new JTextField(20);
     private ConnectionHandler connectionHandler;
     private CommandListener commandListener;
-    private JFrame frame;
-    private JPanel panel = new JPanel();
+    private JFrame connectionFrame;
+    private JPanel connectionMainPanel = new JPanel();
 
     {
         hostField.setFont(FIELD_FONT);
@@ -55,16 +55,16 @@ public class ConnectionFrame extends AbstractFrame {
     }
 
     private void paintFrame() {
-        this.frame = new JFrame(localisation(Constants.CONNECT_WINDOW));
-        frame.setSize(STANDART_WIDTH_SIZE, STANDART_HEIGHT_SIZE);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
-        frame.setLayout(new BorderLayout());
-        createPanel(panel, frame);
-        frame.add(panel, BorderLayout.CENTER);
-        frame.pack();
-        frame.setResizable(false);
-        frame.setVisible(true);
+        this.connectionFrame = new JFrame(localisation(Constants.CONNECT_WINDOW));
+        connectionFrame.setSize(STANDART_WIDTH_SIZE, STANDART_HEIGHT_SIZE);
+        connectionFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        connectionFrame.setLocationRelativeTo(null);
+        connectionFrame.setLayout(new BorderLayout());
+        createPanel(connectionMainPanel, connectionFrame);
+        connectionFrame.add(connectionMainPanel, BorderLayout.CENTER);
+        connectionFrame.pack();
+        connectionFrame.setResizable(false);
+        connectionFrame.setVisible(true);
     }
 
     private void addListener(JButton connectButton) {
@@ -76,35 +76,35 @@ public class ConnectionFrame extends AbstractFrame {
                 try {
                     port = Integer.parseInt(portField.getText());
                     if (connectionHandler.startConnect(host, port) > 0) {
-                        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-                        frame.dispose();
+                        connectionFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                        connectionFrame.dispose();
                         UserFrame userFrame = new UserFrame(getResourceBundle());
                         userFrame.startLogin(commandListener);
                     } else {
-                        showMistake(frame, panel);
+                        showMistake(connectionFrame, connectionMainPanel);
                     }
                 } catch (NumberFormatException exception) {
-                    showMistake(frame, panel);
+                    showMistake(connectionFrame, connectionMainPanel);
                 }
             }
         });
     }
 
-    private void showMistake(Frame frame1, JPanel jPanel) {
+    private void showMistake(Frame frame1, JPanel mistakeLabel) {
         JLabel mistakeConnectionLabel = new JLabel(localisation(Constants.MISTAKE_CONNECTION));
         mistakeConnectionLabel.setFont(MISTAKE_FONT);
         mistakeConnectionLabel.setForeground(Color.RED);
-        jPanel.add(mistakeConnectionLabel, new GridBagConstraints(0, 2, 1, 1, 1, 1,
+        mistakeLabel.add(mistakeConnectionLabel, new GridBagConstraints(0, 2, 1, 1, 1, 1,
                 GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
                 new Insets(2, 2, 2, 2), 0, 0));
-        frame1.add(jPanel, BorderLayout.CENTER);
+        frame1.add(mistakeLabel, BorderLayout.CENTER);
         frame1.setVisible(true);
     }
 
-    private void createPanel(JPanel jPanel, JFrame jFrame) {
-        jPanel.removeAll();
-        jPanel.revalidate();
-        jFrame.setTitle(localisation(Constants.CONNECT_WINDOW));
+    private void createPanel(JPanel reloadedPanel, JFrame reloadedFrame) {
+        reloadedPanel.removeAll();
+        reloadedPanel.revalidate();
+        reloadedFrame.setTitle(localisation(Constants.CONNECT_WINDOW));
         JButton connectButton = new JButton(localisation(Constants.CONNECT_BUTTON));
         addListener(connectButton);
         JLabel hostLabel = new JLabel(localisation(Constants.HOST));
@@ -112,20 +112,20 @@ public class ConnectionFrame extends AbstractFrame {
         connectButton.setFont(BUTTON_FONT);
         hostLabel.setFont(BUTTON_FONT);
         portLabel.setFont(BUTTON_FONT);
-        jPanel.setLayout(new GridBagLayout());
-        FabricOfComponents.setLocationOfComponent(jPanel, hostLabel, 0, 0);
-        FabricOfComponents.setLocationOfComponent(jPanel, portLabel, 0, 1);
-        FabricOfComponents.setLocationOfComponent(jPanel, hostField, 1, 0);
-        FabricOfComponents.setLocationOfComponent(jPanel, portField, 1, 1);
-        FabricOfComponents.setLocationOfComponent(jPanel, connectButton, 1, 2);
+        reloadedPanel.setLayout(new GridBagLayout());
+        FabricOfComponents.setLocationOfComponent(reloadedPanel, hostLabel, 0, 0);
+        FabricOfComponents.setLocationOfComponent(reloadedPanel, portLabel, 0, 1);
+        FabricOfComponents.setLocationOfComponent(reloadedPanel, hostField, 1, 0);
+        FabricOfComponents.setLocationOfComponent(reloadedPanel, portField, 1, 1);
+        FabricOfComponents.setLocationOfComponent(reloadedPanel, connectButton, 1, 2);
         JMenuBar lang = createLanguage(Color.BLACK);
-        FabricOfComponents.setLocationOfComponent(jPanel, lang, 2, 0);
-        jFrame.repaint();
+        FabricOfComponents.setLocationOfComponent(reloadedPanel, lang, 2, 0);
+        reloadedFrame.repaint();
     }
 
     @Override
     public void repaintForLanguage() {
-        createPanel(panel, frame);
+        createPanel(connectionMainPanel, connectionFrame);
     }
 
     @Override

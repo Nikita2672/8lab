@@ -13,11 +13,6 @@ public class Line extends Line2D {
         p2 = new Point();
     }
 
-    public Line() {
-        p1 = new Point();
-        p2 = new Point();
-    }
-
     public Line(double x1, double y1, double x2, double y2) {
         p1.setLocation(x1, y1);
         p2.setLocation(x2, y2);

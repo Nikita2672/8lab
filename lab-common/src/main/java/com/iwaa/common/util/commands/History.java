@@ -16,11 +16,11 @@ public class History extends AbstractCommand {
     public CommandResult execute(Object[] args) {
         Queue<String> history = getCommandManager().getCommandHistory();
         if (history.isEmpty()) {
-            return new CommandResult("History is empty.");
+            return new CommandResult("History is empty.", true);
         } else {
             return new CommandResult("<html>The last 11 commands were:<br>" + history.stream().
                     limit(history.size() - 1).
-                    collect(Collectors.joining("<br>")) + "<html>");
+                    collect(Collectors.joining("<br>")) + "<html>", true);
         }
     }
 }

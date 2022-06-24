@@ -36,8 +36,8 @@ public class UserFrame extends AbstractFrame {
     private final JTextField loginField = new JTextField(20);
     private final JPasswordField passwordField = new JPasswordField(20);
     private CommandListener commandListener;
-    private JFrame frame;
-    private JPanel panel = new JPanel();
+    private JFrame userMainFrame;
+    private final JPanel userMainPanel = new JPanel();
 
     {
         loginField.setFont(FIELD_FONT);
@@ -50,16 +50,16 @@ public class UserFrame extends AbstractFrame {
 
     public void startLogin(CommandListener listener) {
         this.commandListener = listener;
-        this.frame = new JFrame(localisation(Constants.LOGIN_WINDOW));
-        frame.setSize(STANDART_WIDTH_SIZE, STANDART_HEIGHT_SIZE);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
-        frame.setLayout(new BorderLayout());
-        createPanel(panel, frame);
-        frame.add(panel, BorderLayout.CENTER);
-        frame.pack();
-        frame.setResizable(false);
-        frame.setVisible(true);
+        this.userMainFrame = new JFrame(localisation(Constants.LOGIN_WINDOW));
+        userMainFrame.setSize(STANDART_WIDTH_SIZE, STANDART_HEIGHT_SIZE);
+        userMainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        userMainFrame.setLocationRelativeTo(null);
+        userMainFrame.setLayout(new BorderLayout());
+        createPanel(userMainPanel, userMainFrame);
+        userMainFrame.add(userMainPanel, BorderLayout.CENTER);
+        userMainFrame.pack();
+        userMainFrame.setResizable(false);
+        userMainFrame.setVisible(true);
     }
 
     private void addSignUpListener(JButton signUpButton) {
@@ -69,16 +69,16 @@ public class UserFrame extends AbstractFrame {
                 String login = loginField.getText();
                 String password = passwordField.getText();
                 CommandResult result = commandListener.runUser(login, password, "sign_up");
-                if (result.getMessage().equals("Signed up")) {
-                    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-                    frame.dispose();
+                if (result.isSuccess()) {
+                    userMainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                    userMainFrame.dispose();
                     RouteTable routeTable = new RouteTable(getResourceBundle());
                     routeTable.startTable(commandListener, login);
                 } else {
                     JLabel mistakeLoginLabel = new JLabel(localisation(Constants.MISTAKE_LOGIN));
                     mistakeLoginLabel.setFont(MISTAKE_FONT);
                     mistakeLoginLabel.setForeground(Color.RED);
-                    showMistake(frame, panel, mistakeLoginLabel);
+                    showMistake(userMainFrame, userMainPanel, mistakeLoginLabel);
                 }
             }
         });
@@ -88,27 +88,34 @@ public class UserFrame extends AbstractFrame {
         signInButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String login = loginField.getText();
-                String password = passwordField.getText();
-                CommandResult result = commandListener.runUser(login, password, "sign_in");
-                if (result.getMessage().equals("Signed in")) {
-                    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-                    frame.dispose();
-                    RouteTable routeTable = new RouteTable(getResourceBundle());
-                    routeTable.startTable(commandListener, login);
-                } else {
-                    JLabel mistakeUserLabel = new JLabel(localisation(Constants.MISTAKE_USER));
-                    mistakeUserLabel.setFont(MISTAKE_FONT);
-                    mistakeUserLabel.setForeground(Color.RED);
-                    showMistake(frame, panel, mistakeUserLabel);
+                try {
+                    String login = loginField.getText();
+                    String password = passwordField.getText();
+                    CommandResult result = commandListener.runUser(login, password, "sign_in");
+                    if (result.isSuccess()) {
+                        userMainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                        userMainFrame.dispose();
+                        RouteTable routeTable = new RouteTable(getResourceBundle());
+                        routeTable.startTable(commandListener, login);
+                    } else {
+                        JLabel mistakeUserLabel = new JLabel(localisation(Constants.MISTAKE_USER));
+                        mistakeUserLabel.setFont(MISTAKE_FONT);
+                        mistakeUserLabel.setForeground(Color.RED);
+                        showMistake(userMainFrame, userMainPanel, mistakeUserLabel);
+                    }
+                } catch (NullPointerException exception) {
+                    JLabel mistakeServerLabel = new JLabel("server don't answer");
+                    mistakeServerLabel.setFont(MISTAKE_FONT);
+                    mistakeServerLabel.setBackground(Color.RED);
+                    showMistake(userMainFrame, userMainPanel, mistakeServerLabel);
                 }
             }
         });
     }
 
-    private void createPanel(JPanel jPanel, JFrame jFrame) {
-        jPanel.removeAll();
-        jPanel.revalidate();
+    private void createPanel(JPanel reloadedPanel, JFrame reloadedFrame) {
+        reloadedPanel.removeAll();
+        reloadedPanel.revalidate();
         JButton signInButton = new JButton(localisation(Constants.SIGN_IN_BUTTON));
         JButton signUpButton = new JButton(localisation(Constants.SIGN_UP_BUTTON));
         JLabel loginLabel = new JLabel(localisation(Constants.LOGIN));
@@ -122,28 +129,28 @@ public class UserFrame extends AbstractFrame {
         infoLabel.setForeground(Color.BLUE);
         addSignInListener(signInButton);
         addSignUpListener(signUpButton);
-        jPanel.setLayout(new GridBagLayout());
-        FabricOfComponents.setLocationOfComponent(jPanel, loginLabel, 0, 0);
-        FabricOfComponents.setLocationOfComponent(jPanel, passwordLabel, 0, 1);
-        FabricOfComponents.setLocationOfComponent(jPanel, loginField, 1, 0);
-        FabricOfComponents.setLocationOfComponent(jPanel, passwordField, 1, 1);
-        FabricOfComponents.setLocationOfComponent(jPanel, signInButton, 1, 2);
-        FabricOfComponents.setLocationOfComponent(jPanel, signUpButton, 1, THREE);
-        FabricOfComponents.setLocationOfComponent(jPanel, infoLabel, 0, THREE);
+        reloadedPanel.setLayout(new GridBagLayout());
+        FabricOfComponents.setLocationOfComponent(reloadedPanel, loginLabel, 0, 0);
+        FabricOfComponents.setLocationOfComponent(reloadedPanel, passwordLabel, 0, 1);
+        FabricOfComponents.setLocationOfComponent(reloadedPanel, loginField, 1, 0);
+        FabricOfComponents.setLocationOfComponent(reloadedPanel, passwordField, 1, 1);
+        FabricOfComponents.setLocationOfComponent(reloadedPanel, signInButton, 1, 2);
+        FabricOfComponents.setLocationOfComponent(reloadedPanel, signUpButton, 1, THREE);
+        FabricOfComponents.setLocationOfComponent(reloadedPanel, infoLabel, 0, THREE);
         JMenuBar lang = createLanguage(Color.BLACK);
-        FabricOfComponents.setLocationOfComponent(jPanel, lang, 2, 0);
-        jFrame.repaint();
+        FabricOfComponents.setLocationOfComponent(reloadedPanel, lang, 2, 0);
+        reloadedFrame.repaint();
     }
 
-    private void showMistake(Frame jFrame, JPanel jPanel, JLabel jLabel) {
-        FabricOfComponents.setLocationOfComponent(jPanel, jLabel, 0, 2);
-        jFrame.add(jPanel, BorderLayout.CENTER);
-        jFrame.setVisible(true);
+    private void showMistake(Frame frameWithMistake, JPanel panelWithMistake, JLabel mistakeLabel) {
+        FabricOfComponents.setLocationOfComponent(panelWithMistake, mistakeLabel, 0, 2);
+        frameWithMistake.add(panelWithMistake, BorderLayout.CENTER);
+        frameWithMistake.setVisible(true);
     }
 
     @Override
     public void repaintForLanguage() {
-        createPanel(panel, frame);
+        createPanel(userMainPanel, userMainFrame);
     }
 
     @Override

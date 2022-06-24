@@ -20,8 +20,6 @@ public final class Client {
             commandAdmin.setCommandListener(commandListener);
             System.out.println("Hello!");
             connectionHandler.startConnection(commandListener);
-            //commandListener.launch();
-            //connectionHandler.close();
         } catch (NullPointerException e) {
             e.printStackTrace();
             System.out.println("Good bye");

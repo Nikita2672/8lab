@@ -2,7 +2,6 @@ package com.iwaa.client.gui.interimFrames;
 
 import com.iwaa.client.gui.AbstractFrame;
 import com.iwaa.client.gui.Table.RouteTable;
-import com.iwaa.client.gui.Table.RouteTableModel;
 import com.iwaa.client.local.Constants;
 import com.iwaa.common.util.controllers.CommandListener;
 import com.iwaa.common.util.network.CommandResult;
@@ -11,7 +10,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import java.awt.Color;
@@ -50,8 +48,12 @@ import static com.iwaa.client.gui.interimFrames.FabricOfComponents.setLocationOf
 
 public class InsertFrame extends AbstractFrame {
 
-    private final JFrame insertFrame = new JFrame(localisation(Constants.INSERT));
-    private final JPanel panel = new JPanel();
+    private static final Long MIN_DISTANCE = 1L;
+    private static final int MAX_COORDINATE_X = 245;
+    private static final int MAX_COORDINATE_Y = 362;
+
+    private final JFrame insertMainFrame = new JFrame(localisation(Constants.INSERT));
+    private final JPanel insertPanel = new JPanel();
 
     private final JTextField nameField = new JTextField(20);
     private final JTextField distanceField = new JTextField(20);
@@ -66,7 +68,6 @@ public class InsertFrame extends AbstractFrame {
     private final JTextField toXField = new JTextField(20);
     private final JTextField toYField = new JTextField(20);
     private final JTextField toZField = new JTextField(20);
-
 
     private final JLabel nameLabel = new JLabel(localisation(Constants.ENTER_NAME));
     private final JLabel distanceLabel = new JLabel(localisation(Constants.ENTER_DISTANCE));
@@ -90,18 +91,12 @@ public class InsertFrame extends AbstractFrame {
     private final JLabel notMax = new JLabel(localisation(Constants.NIT_MAX));
     private final JLabel success = new JLabel(localisation(Constants.SUCCESS));
 
-
     private final JButton send = new JButton(localisation(Constants.SEND));
 
-
-    private final Long minDistance = 1L;
-    private final int maxCoordinateX = 245;
-    private final int maxCoordinateY = 362;
-
     {
-        insertFrame.setLayout(new BorderLayout());
-        insertFrame.setSize(new Dimension(INSERT_SIZE, INSERT_SIZE));
-        insertFrame.setLocationRelativeTo(null);
+        insertMainFrame.setLayout(new BorderLayout());
+        insertMainFrame.setSize(new Dimension(INSERT_SIZE, INSERT_SIZE));
+        insertMainFrame.setLocationRelativeTo(null);
 
         notMax.setFont(BUTTON_FONT);
         success.setFont(BUTTON_FONT);
@@ -143,40 +138,35 @@ public class InsertFrame extends AbstractFrame {
         toYLabel.setFont(BUTTON_FONT);
         toZLabel.setFont(BUTTON_FONT);
 
-        panel.setLayout(new GridBagLayout());
+        insertPanel.setLayout(new GridBagLayout());
+        setLocationOfComponent(insertPanel, nameLabel, 0, 0);
+        setLocationOfComponent(insertPanel, nameField, 1, 0);
+        setLocationOfComponent(insertPanel, distanceLabel, 0, 1);
+        setLocationOfComponent(insertPanel, distanceField, 1, 1);
+        setLocationOfComponent(insertPanel, coordinateLabel, 1, 2);
+        setLocationOfComponent(insertPanel, coordinateXLabel, 0, THREE);
+        setLocationOfComponent(insertPanel, coordinateXField, 1, THREE);
+        setLocationOfComponent(insertPanel, coordinateYLabel, 0, FOUR);
+        setLocationOfComponent(insertPanel, coordinateYField, 1, FOUR);
+        setLocationOfComponent(insertPanel, locationFromLabel, 1, FIVE);
+        setLocationOfComponent(insertPanel, fromXLabel, 0, SIX);
+        setLocationOfComponent(insertPanel, fromXField, 1, SIX);
+        setLocationOfComponent(insertPanel, fromYLabel, 0, SEVEN);
+        setLocationOfComponent(insertPanel, fromYField, 1, SEVEN);
+        setLocationOfComponent(insertPanel, fromZLabel, 0, EIGHT);
+        setLocationOfComponent(insertPanel, fromZField, 1, EIGHT);
+        setLocationOfComponent(insertPanel, locationToLabel, 1, NINE);
+        setLocationOfComponent(insertPanel, toXLabel, 0, TEN);
+        setLocationOfComponent(insertPanel, toXField, 1, TEN);
+        setLocationOfComponent(insertPanel, toYLabel, 0, ELEVEN);
+        setLocationOfComponent(insertPanel, toYField, 1, ELEVEN);
+        setLocationOfComponent(insertPanel, toZLabel, 0, TWELVE);
+        setLocationOfComponent(insertPanel, toZField, 1, TWELVE);
+        setLocationOfComponent(insertPanel, send, 1, THIRTEEN);
 
-        FabricOfComponents.setLocationOfComponent(panel, nameLabel, 0, 0);
-        setLocationOfComponent(panel, nameField, 1, 0);
-        FabricOfComponents.setLocationOfComponent(panel, distanceLabel, 0, 1);
-        setLocationOfComponent(panel, distanceField, 1, 1);
-        FabricOfComponents.setLocationOfComponent(panel, coordinateLabel, 1, 2);
-        FabricOfComponents.setLocationOfComponent(panel, coordinateYLabel, 0, THREE);
-        setLocationOfComponent(panel, coordinateXField, 1, THREE);
-        FabricOfComponents.setLocationOfComponent(panel, coordinateXLabel, 0, FOUR);
-        setLocationOfComponent(panel, coordinateYField, 1, FOUR);
-        FabricOfComponents.setLocationOfComponent(panel, locationFromLabel, 1, FIVE);
-        FabricOfComponents.setLocationOfComponent(panel, fromXLabel, 0, SIX);
-        setLocationOfComponent(panel, fromXField, 1, SIX);
-        FabricOfComponents.setLocationOfComponent(panel, fromYLabel, 0, SEVEN);
-        setLocationOfComponent(panel, fromYField, 1, SEVEN);
-        FabricOfComponents.setLocationOfComponent(panel, fromZLabel, 0, EIGHT);
-        setLocationOfComponent(panel, fromZField, 1, EIGHT);
-        FabricOfComponents.setLocationOfComponent(panel, locationToLabel, 1, NINE);
-        FabricOfComponents.setLocationOfComponent(panel, toXLabel, 0, TEN);
-        setLocationOfComponent(panel, toXField, 1, TEN);
-        FabricOfComponents.setLocationOfComponent(panel, toYLabel, 0, ELEVEN);
-        setLocationOfComponent(panel, toYField, 1, ELEVEN);
-        FabricOfComponents.setLocationOfComponent(panel, toZLabel, 0, TWELVE);
-        setLocationOfComponent(panel, toZField, 1, TWELVE);
-
-        panel.add(send, new GridBagConstraints(1, THIRTEEN, 1, 1, 1, 1,
-                GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
-                new Insets(2, 2, 2, 2), 0, 0));
-
-        insertFrame.add(panel);
-        insertFrame.pack();
-        insertFrame.setResizable(false);
-
+        insertMainFrame.add(insertPanel);
+        insertMainFrame.pack();
+        insertMainFrame.setResizable(false);
     }
 
     public InsertFrame(ResourceBundle resourceBundle) {
@@ -193,7 +183,7 @@ public class InsertFrame extends AbstractFrame {
     private boolean checkDistance(String distance) {
         try {
             Long res = Long.parseLong(distance);
-            return res > minDistance;
+            return res > MIN_DISTANCE;
         } catch (NumberFormatException e) {
             return false;
         }
@@ -226,75 +216,70 @@ public class InsertFrame extends AbstractFrame {
         }
     }
 
-    public void startInsertFrame(CommandListener commandListener, String command, RouteTableModel routeTableModel,
-                                 JPanel jPanel, JFrame frame, JScrollPane jScrollPane, RouteTable routeTable) {
-        insertFrame.setTitle(command);
-        insertFrame.setVisible(true);
+    public void startInsertFrame(CommandListener commandListener, String command, RouteTable routeTable) {
+        insertMainFrame.setTitle(command);
+        insertMainFrame.setVisible(true);
         send.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 boolean result = checkResult();
                 if (!result) {
-                    panel.add(mistake, new GridBagConstraints(0, THIRTEEN, 1, 1, 1, 1,
+                    insertPanel.add(mistake, new GridBagConstraints(0, THIRTEEN, 1, 1, 1, 1,
                             GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
                             new Insets(2, 2, 2, 2), 0, 0));
-                    insertFrame.add(panel);
-                    insertFrame.setVisible(true);
+                    insertMainFrame.add(insertPanel);
+                    insertMainFrame.setVisible(true);
                 } else {
                     if ("add".equals(command)) {
-                        doAdd(commandListener, routeTableModel, jPanel, frame, jScrollPane, routeTable);
+                        doAdd(commandListener, routeTable);
                     }
                     if ("add_if_max".equals(command)) {
-                        doAddIfMax(commandListener, routeTableModel, jPanel, frame, jScrollPane, routeTable);
+                        doAddIfMax(commandListener, routeTable);
                     }
                     if ("remove_lower".equals(command)) {
-                        doRemoveLower(commandListener, routeTableModel, jPanel, frame, jScrollPane, routeTable);
+                        doRemoveLower(commandListener, routeTable);
                     }
                     if ("update".equals(command.split(" ")[0])) {
-                        doUpdate(commandListener, routeTableModel, jPanel, frame, jScrollPane, command, routeTable);
+                        doUpdate(commandListener, command, routeTable);
                     }
                 }
             }
         });
     }
 
-    private void doUpdate(CommandListener commandListener, RouteTableModel routeTableModel, JPanel jPanel,
-                          JFrame frame, JScrollPane jScrollPane, String command, RouteTable routeTable) {
+    private void doUpdate(CommandListener commandListener, String command, RouteTable routeTable) {
         ArrayList<String> args = new ArrayList<>();
         initArgs(args);
         args.add(command.split(" ")[1]);
         CommandResult commandResult = commandListener.runUpdate(args);
-        insertFrame.dispose();
-        showResult(commandResult, commandListener, routeTableModel, jPanel, frame, jScrollPane, routeTable);
+        insertMainFrame.dispose();
+        showResult(commandResult, routeTable);
     }
 
-    private void doRemoveLower(CommandListener commandListener, RouteTableModel routeTableModel, JPanel jPanel,
-                               JFrame frame, JScrollPane jScrollPane, RouteTable routeTable) {
+    private void doRemoveLower(CommandListener commandListener, RouteTable routeTable) {
         ArrayList<String> args = new ArrayList<>();
         initArgs(args);
         CommandResult commandResult = commandListener.runRemoveLower(args);
-        insertFrame.dispose();
-        showResult(commandResult, commandListener, routeTableModel, jPanel, frame, jScrollPane, routeTable);
+        insertMainFrame.dispose();
+        showResult(commandResult, routeTable);
     }
 
-    private void doAdd(CommandListener commandListener, RouteTableModel routeTableModel,
-                       JPanel jPanel, JFrame frame, JScrollPane jScrollPane, RouteTable routeTable) {
+    private void doAdd(CommandListener commandListener, RouteTable routeTable) {
         ArrayList<String> args = new ArrayList<>();
         initArgs(args);
         commandListener.runAdd(args);
-        insertFrame.dispose();
+        insertMainFrame.dispose();
         routeTable.reload();
         showResult(success);
     }
 
-    private void doAddIfMax(CommandListener commandListener, RouteTableModel routeTableModel, JPanel jPanel,
-                            JFrame frame, JScrollPane jScrollPane, RouteTable routeTable) {
+    private void doAddIfMax(CommandListener commandListener, RouteTable routeTable) {
         ArrayList<String> args = new ArrayList<>();
         initArgs(args);
         CommandResult commandResult = commandListener.runAddIfMax(args);
-        insertFrame.dispose();
+        insertMainFrame.dispose();
         routeTable.reload();
-        if (commandResult.getMessage().equals("Given route is not maximal")) {
+        if (!commandResult.isSuccess()) {
             showResult(notMax);
         } else {
             showResult(success);
@@ -303,15 +288,14 @@ public class InsertFrame extends AbstractFrame {
 
     private boolean checkResult() {
         return checkName(nameField.getText()) & checkDistance(distanceField.getText())
-                & checkCoordinate(coordinateXField.getText(), maxCoordinateX)
-                & checkCoordinate(coordinateYField.getText(), maxCoordinateY)
+                & checkCoordinate(coordinateXField.getText(), MAX_COORDINATE_X)
+                & checkCoordinate(coordinateYField.getText(), MAX_COORDINATE_Y)
                 & checkLocationLong(fromXField.getText()) & checkLocationInt(fromYField.getText())
                 & checkLocationInt(fromZField.getText()) & checkLocationLong(toXField.getText())
                 & checkLocationInt(toYField.getText()) & checkLocationInt(toZField.getText());
     }
 
-    private void showResult(CommandResult commandResult, CommandListener commandListener, RouteTableModel routeTableModel,
-                            JPanel jPanel, JFrame frame, JScrollPane jScrollPane, RouteTable routeTable) {
+    private void showResult(CommandResult commandResult, RouteTable routeTable) {
         JLabel answer = new JLabel(commandResult.getMessage());
         answer.setFont(BUTTON_FONT);
         routeTable.reload();
@@ -319,14 +303,14 @@ public class InsertFrame extends AbstractFrame {
     }
 
     private void showResult(JLabel result) {
-        JFrame frame = new JFrame("result");
-        frame.setSize(new Dimension(STANDART_WIDTH_SIZE, STANDART_HEIGHT_SIZE));
-        frame.setLayout(new BorderLayout());
-        frame.setLocationRelativeTo(null);
-        frame.add(result, BorderLayout.CENTER);
-        frame.pack();
-        frame.setResizable(false);
-        frame.setVisible(true);
+        JFrame resultFrame = new JFrame("result");
+        resultFrame.setSize(new Dimension(STANDART_WIDTH_SIZE, STANDART_HEIGHT_SIZE));
+        resultFrame.setLayout(new BorderLayout());
+        resultFrame.setLocationRelativeTo(null);
+        resultFrame.add(result, BorderLayout.CENTER);
+        resultFrame.pack();
+        resultFrame.setResizable(false);
+        resultFrame.setVisible(true);
     }
 
     private void initArgs(ArrayList<String> args) {
