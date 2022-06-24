@@ -12,6 +12,6 @@ public class GroupCounting extends AbstractCommand {
 
     @Override
     public CommandResult execute(Object[] args) {
-        return new CommandResult(getCommandManager().getCollectionManager().outputGroupsByDistance());
+        return new CommandResult("<html>" + getCommandManager().getCollectionManager().outputGroupsByDistance() + "<html>");
     }
 }

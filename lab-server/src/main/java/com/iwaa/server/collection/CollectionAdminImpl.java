@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 
 public class CollectionAdminImpl implements CollectionAdmin {
@@ -67,9 +66,9 @@ public class CollectionAdminImpl implements CollectionAdmin {
     @Override
     public List<String> getInfo() {
         List<String> info = new ArrayList<>();
-        info.add("Collection type: " + routes.getClass().getName());
-        info.add("Date: " + creationDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm")));
-        info.add("Size: " + routes.size());
+        info.add("<br>Collection type: " + routes.getClass().getName());
+        info.add("<br>Date: " + creationDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm")));
+        info.add("<br>Size: " + routes.size());
         return info;
     }
 
@@ -88,7 +87,7 @@ public class CollectionAdminImpl implements CollectionAdmin {
         if (group.isEmpty()) {
             return EMPTY_MESSAGE;
         }
-        StringJoiner result = new StringJoiner("\n");
+        StringJoiner result = new StringJoiner("<br>");
         for (Map.Entry<Long, Long> entry: group.entrySet()) {
             result.add("Number of elements with distance " + entry);
         }
@@ -109,7 +108,7 @@ public class CollectionAdminImpl implements CollectionAdmin {
 
     @Override
     public String outFields() {
-        StringJoiner result = new StringJoiner("\n");
+        StringJoiner result = new StringJoiner("<br>");
         if (!routes.isEmpty()) {
             routes.stream().map(Route::getDistance).sorted(Comparator.reverseOrder()).forEach(it -> result.add(it.toString()));
             return result.toString();
@@ -119,7 +118,7 @@ public class CollectionAdminImpl implements CollectionAdmin {
 
     @Override
     public String outFilter(Long distance) {
-        StringJoiner result = new StringJoiner("\n");
+        StringJoiner result = new StringJoiner("<br>");
         if (!routes.isEmpty()) {
             routes.stream().filter(it -> it.getDistance() < distance).forEach(it -> result.add(it.toString()));
             return result.toString();

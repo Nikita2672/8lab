@@ -12,10 +12,12 @@ public class Help extends AbstractCommand {
 
     @Override
     public CommandResult execute(Object[] args) {
-        return new CommandResult(getCommandManager().getCommands()
+        return new CommandResult("<html>" + getCommandManager().getCommands()
                 .values()
                 .stream()
+                .filter(value -> !(value.getName().equals("sign_in") || value.getName().equals("sign_up")
+                        || value.getName().equals("exit") || value.getName().equals("update")))
                 .map(value -> value.getName() + " - " + value.getDescription())
-                .collect(Collectors.joining("\n")));
+                .collect(Collectors.joining("<br>")) + "<html>");
     }
 }

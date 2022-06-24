@@ -21,9 +21,6 @@ public final class ClientNetworkListener implements NetworkListener {
     @Override
     public CommandResult listen(Request request) {
         CommandResult commandResult = null;
-        if (!connectionHandler.isOpen()) {
-            connectionHandler.openConnection();
-        }
         if (connectionHandler.isOpen()) {
             try {
                 Serializer serializer = new Serializer();

@@ -67,7 +67,6 @@ public class RouteCreator {
                 ERROR, "y mustn't be null", Integer::parseInt, false);
         Integer z = valid(arg -> true, "Please enter z (Integer) can't be null",
                 ERROR, "z mustn't be null", Integer::parseInt, false);
-
         return new Location(x, y, z);
     }
 

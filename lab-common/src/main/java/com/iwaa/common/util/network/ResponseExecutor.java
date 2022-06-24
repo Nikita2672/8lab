@@ -18,5 +18,4 @@ public class ResponseExecutor {
             commandListener.setUser(commandResult.getUser());
         }
     }
-
 }

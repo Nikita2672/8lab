@@ -1,12 +1,12 @@
 package com.iwaa.client;
 
-import com.iwaa.common.util.exceptions.EndOfStreamException;
-import com.iwaa.common.util.io.DataReader;
+import com.iwaa.client.gui.authorize.ConnectionFrame;
+import com.iwaa.client.local.Local;
+import com.iwaa.common.util.controllers.CommandListener;
 import com.iwaa.common.util.state.State;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 
@@ -18,9 +18,13 @@ public final class ConnectionHandler {
     private InputStream inputStream;
     private OutputStream outputStream;
 
-
     public ConnectionHandler(State state) {
         this.state = state;
+    }
+
+    public void startConnection(CommandListener commandListener) {
+        ConnectionFrame connectionFrame = new ConnectionFrame(Local.getResourceBundleDefault());
+        connectionFrame.startConnection(this, commandListener);
     }
 
     public Socket getSocket() {
@@ -35,19 +39,7 @@ public final class ConnectionHandler {
         return outputStream;
     }
 
-    public void openConnection() {
-        try {
-            while (true) {
-                if (openConnection(inputAddress(), inputPort()) > 0) {
-                    return;
-                }
-            }
-        } catch (IOException | EndOfStreamException e) {
-            state.switchPerformanceStatus();
-        }
-    }
-
-    public int openConnection(String address, int port) {
+    public int startConnect(String address, int port) {
         try {
             socket = new Socket(address, port);
             inputStream = socket.getInputStream();
@@ -60,23 +52,6 @@ public final class ConnectionHandler {
             System.out.println("Invalid host or port");
             return -1;
         }
-    }
-
-    private int inputPort() throws EndOfStreamException, IOException {
-        try {
-            DataReader reader = new DataReader(new InputStreamReader(System.in));
-            System.out.println("Enter port:");
-            return Integer.parseInt(reader.inputLine());
-        } catch (NumberFormatException e) {
-            return 0;
-        }
-    }
-
-    private String inputAddress() throws EndOfStreamException, IOException {
-        DataReader reader = new DataReader(new InputStreamReader(System.in));
-        System.out.println("Enter address:");
-        return reader.inputLine();
-
     }
 
     public boolean isOpen() {

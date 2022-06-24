@@ -30,6 +30,10 @@ public class CommandResult implements Serializable {
         return message;
     }
 
+    public Collection<Route> getRoutes() {
+        return routes;
+    }
+
     public User getUser() {
         return user;
     }
@@ -41,12 +45,14 @@ public class CommandResult implements Serializable {
     public void showResult() {
         if (routes != null) {
             if (routes.isEmpty()) {
+                this.message = "Collection is empty";
                 System.out.println("Collection is empty.");
                 return;
             }
-            System.out.println(routes.stream()
+            this.message = routes.stream()
                     .map(Route::toString)
-                    .collect(Collectors.joining("\n")));
+                    .collect(Collectors.joining("\n"));
+            System.out.println(message);
             return;
         }
         System.out.println(message);

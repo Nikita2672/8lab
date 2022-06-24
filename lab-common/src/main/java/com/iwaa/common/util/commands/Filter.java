@@ -25,6 +25,6 @@ public class Filter extends AbstractCommand {
     @Override
     public CommandResult execute(Object[] args) {
         long distance = (long) args[0];
-        return new CommandResult(getCommandManager().getCollectionManager().outFilter(distance));
+        return new CommandResult("<html>" + getCommandManager().getCollectionManager().outFilter(distance) + "<html>");
     }
 }

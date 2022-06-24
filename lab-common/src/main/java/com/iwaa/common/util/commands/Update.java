@@ -1,61 +1,48 @@
 package com.iwaa.common.util.commands;
 
 import com.iwaa.common.util.controllers.CommandAdmin;
+import com.iwaa.common.util.data.Coordinates;
+import com.iwaa.common.util.data.Location;
 import com.iwaa.common.util.data.Route;
-import com.iwaa.common.util.data.RouteCreator;
 import com.iwaa.common.util.entities.User;
 import com.iwaa.common.util.network.CommandResult;
-import com.iwaa.common.util.network.Request;
 
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.SQLException;
+
+import static com.iwaa.common.util.commands.ParametersConstants.COORDINATE_Y_ARGS;
+import static com.iwaa.common.util.commands.ParametersConstants.LOCATION_FROM_X_ARGS;
+import static com.iwaa.common.util.commands.ParametersConstants.LOCATION_FROM_Y_ARGS;
+import static com.iwaa.common.util.commands.ParametersConstants.LOCATION_FROM_Z_ARGS;
+import static com.iwaa.common.util.commands.ParametersConstants.LOCATION_TO_X_ARGS;
+import static com.iwaa.common.util.commands.ParametersConstants.LOCATION_TO_Y_ARGS;
+import static com.iwaa.common.util.commands.ParametersConstants.LOCATION_TO_Z_ARGS;
+import static com.iwaa.common.util.commands.ParametersConstants.UPDATE_ARGS;
 
 public class Update extends AbstractCommand {
 
     public Update(CommandAdmin commandAdmin) {
-        super(commandAdmin, "update", "обновить значение элемента коллекции, id которого равен заданному", 1);
+        super(commandAdmin, "update", "обновить значение элемента коллекции, id которого равен заданному", UPDATE_ARGS);
     }
 
     @Override
     public Object[] readArgs(Object[] args) {
-        try {
-            long id = Long.parseLong((String) args[0]);
-            User user = (User) args[1];
-            CommandResult commandResult = getCommandManager().getNetworkListener()
-                    .listen(new Request(new FindById(getCommandManager()), new Object[]{id, user}));
-            if (commandResult.getMessage() == null) {
-                System.out.println("No route with such id");
-                return null;
-            }
-            if (commandResult.getUser() == null) {
-                System.out.println("you don't have rights to update this route.");
-                return null;
-            }
-            RouteCreator routeCreator = new RouteCreator(getCommandManager().getCommandListener().getReader());
-            if (getCommandManager().getCommandListener().getReader().getClass() == FileReader.class) {
-                routeCreator.setFileManager(getCommandManager().getCommandListener().getFileManager());
-            }
-            Route route = routeCreator.createRoute();
-            route.setId(id);
-            return new Object[]{route, user};
-        } catch (IOException e) {
-            System.out.println("Input error.");
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid format of id.");
-        }
-        return null;
+        Route routeToUpdate = new Route((String) args[0], new Coordinates(Float.parseFloat(args[2].toString()),
+                Float.parseFloat(args[COORDINATE_Y_ARGS].toString())),
+                new Location(Long.parseLong(args[LOCATION_FROM_X_ARGS].toString()), Integer.parseInt(args[LOCATION_FROM_Y_ARGS].toString()),
+                        Integer.parseInt(args[LOCATION_FROM_Z_ARGS].toString())), new Location(Long.parseLong(args[LOCATION_TO_X_ARGS].toString()),
+                Integer.parseInt(args[LOCATION_TO_Y_ARGS].toString()), Integer.parseInt(args[LOCATION_TO_Z_ARGS].toString())), Long.parseLong(args[1].toString()));
+        return new Object[]{routeToUpdate, args[UPDATE_ARGS]};
     }
 
     @Override
     public CommandResult execute(Object[] args) {
         try {
-        Route updatedRoute = (Route) args[0];
-        User user = (User) args[1];
-        updatedRoute.setAuthor((user.getLogin()));
-        getCommandManager().getDBWorker().updateRoute(updatedRoute);
-        getCommandManager().getCollectionManager().update(updatedRoute);
-        return new CommandResult("Your Route was successfully Updated");
+            Route updatedRoute = (Route) args[0];
+            User user = (User) args[1];
+            updatedRoute.setAuthor((user.getLogin()));
+            getCommandManager().getDBWorker().updateRoute(updatedRoute);
+            getCommandManager().getCollectionManager().update(updatedRoute);
+            return new CommandResult("Your Route was successfully Updated");
         } catch (SQLException e) {
             return new CommandResult("Couldn't update route because of DB problems.");
         }

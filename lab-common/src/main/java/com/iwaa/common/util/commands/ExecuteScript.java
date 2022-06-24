@@ -19,8 +19,7 @@ public class ExecuteScript extends AbstractCommand {
             return new CommandResult("The command was ignored because it will call recursion.");
         } else {
             File file = new File(fileName);
-            getCommandManager().getCommandListener().runFile(file);
+            return getCommandManager().getCommandListener().runFile(file);
         }
-        return new CommandResult("Exiting from " + fileName);
     }
 }

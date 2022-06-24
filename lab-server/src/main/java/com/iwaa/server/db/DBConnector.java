@@ -12,8 +12,10 @@ public class DBConnector {
     private static final String PASSWORD = System.getenv("DB_PASSWORD");
     private static final String URL = "jdbc:postgresql://" + HOST + ":5432/" + DB_NAME;
 
-    public Connection connect() throws SQLException {
+    /*public Connection connect() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
+    }*/
+    public Connection connect() throws SQLException {
+        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "lkx732");
     }
-
 }

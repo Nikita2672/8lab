@@ -13,14 +13,16 @@ import java.sql.SQLException;
 public class SignInCommand extends AbstractCommand {
 
     public SignInCommand(CommandAdmin commandAdmin) {
-        super(commandAdmin, "sign_in", "sign in user", 0);
+        super(commandAdmin, "sign_in", "", 2);
     }
 
     @Override
     public Object[] readArgs(Object[] args) throws EndOfStreamException {
         try {
+            String login = (String) args[0];
+            String password = (String) args[1];
             UserLoader userLoader = new UserLoader();
-            User user = userLoader.loadUser();
+            User user = userLoader.loadUser(login, password);
             return new Object[]{user};
         } catch (IOException e) {
             return null;
@@ -32,8 +34,12 @@ public class SignInCommand extends AbstractCommand {
         try {
             User user = (User) args[0];
             long result = getCommandManager().getDBWorker().checkUser(user);
-            user.setId(result);
-            return new CommandResult("Signed in.", user);
+            if (result > 0) {
+                user.setId(result);
+                return new CommandResult("Signed in", user);
+            } else {
+                return new CommandResult("There is no such user");
+            }
         } catch (SQLException e) {
             return new CommandResult("Wrong credentials.");
         }

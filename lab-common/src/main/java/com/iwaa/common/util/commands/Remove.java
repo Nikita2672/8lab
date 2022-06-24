@@ -14,7 +14,6 @@ public class Remove extends AbstractCommand {
         super(commandAdmin, "remove_by_id", "удалить элемент из коллекции по его ID", 1);
     }
 
-    @Override
     public Object[] readArgs(Object[] args) {
         try {
             User user = (User) args[1];

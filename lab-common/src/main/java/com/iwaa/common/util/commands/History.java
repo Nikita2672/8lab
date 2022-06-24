@@ -18,9 +18,9 @@ public class History extends AbstractCommand {
         if (history.isEmpty()) {
             return new CommandResult("History is empty.");
         } else {
-            return new CommandResult("The last 11 commands were:\n" + history.stream().
+            return new CommandResult("<html>The last 11 commands were:<br>" + history.stream().
                     limit(history.size() - 1).
-                    collect(Collectors.joining("\n")));
+                    collect(Collectors.joining("<br>")) + "<html>");
         }
     }
 }

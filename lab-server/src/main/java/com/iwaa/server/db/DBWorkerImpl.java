@@ -1,6 +1,5 @@
 package com.iwaa.server.db;
 
-
 import com.iwaa.common.util.data.Coordinates;
 import com.iwaa.common.util.data.Location;
 import com.iwaa.common.util.data.Route;
@@ -12,10 +11,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 public class DBWorkerImpl implements DBWorker {
 
@@ -46,6 +45,7 @@ public class DBWorkerImpl implements DBWorker {
 
     private final DBConnector dbConnector;
     private final Encryptor encryptor;
+    private final Statement statement = null;
 
     public DBWorkerImpl(DBConnector dbConnector, Encryptor encryptor) {
         this.dbConnector = dbConnector;

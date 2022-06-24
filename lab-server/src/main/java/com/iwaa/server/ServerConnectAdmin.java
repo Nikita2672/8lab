@@ -112,6 +112,7 @@ public final class ServerConnectAdmin implements Runnable {
                 }
             }
         }
+        executorService.shutdown();
     }
 
     private void accept() throws IOException {
@@ -148,6 +149,7 @@ public final class ServerConnectAdmin implements Runnable {
             CompletableFuture.supplyAsync(() -> requestExecutor.execute(request), executorService)
                     .thenAcceptAsync(commandResultSender::send, executorService);
         }
+
         if (channels.get((SocketChannel) key.channel()) == null) {
             throw new IOException();
         }

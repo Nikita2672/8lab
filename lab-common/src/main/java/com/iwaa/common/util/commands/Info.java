@@ -12,6 +12,6 @@ public class Info extends AbstractCommand {
 
     @Override
     public CommandResult execute(Object[] args) {
-        return new CommandResult("Collection info:" + "\n" + getCommandManager().getCollectionManager().getInfo());
+        return new CommandResult("<html>Collection info:" + getCommandManager().getCollectionManager().getInfo() + "<html>");
     }
 }

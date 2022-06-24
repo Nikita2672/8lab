@@ -13,14 +13,16 @@ import java.sql.SQLException;
 public class SignUpCommand extends AbstractCommand {
 
     public SignUpCommand(CommandAdmin commandAdmin) {
-        super(commandAdmin, "sign_up", "sign up user", 0);
+        super(commandAdmin, "sign_up", "", 2);
     }
 
     @Override
     public Object[] readArgs(Object[] args) throws EndOfStreamException {
         try {
+            String login = (String) args[0];
+            String password = (String) args[1];
             UserLoader userLoader = new UserLoader();
-            User newUser = userLoader.loadUser();
+            User newUser = userLoader.loadUser(login, password);
             return new Object[]{newUser};
         } catch (IOException e) {
             return null;
@@ -33,7 +35,7 @@ public class SignUpCommand extends AbstractCommand {
             User user = (User) args[0];
             long result = getCommandManager().getDBWorker().addUser(user);
             user.setId(result);
-            return new CommandResult("Signed up.", user);
+            return new CommandResult("Signed up", user);
         } catch (SQLException e) {
             return new CommandResult("Failed to create a user, this login is already occupied.");
         }

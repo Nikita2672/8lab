@@ -19,10 +19,11 @@ public final class Client {
             ClientCommandListener commandListener = new ClientCommandListener(commandAdmin);
             commandAdmin.setCommandListener(commandListener);
             System.out.println("Hello!");
-            connectionHandler.openConnection();
-            commandListener.launch();
-            connectionHandler.close();
+            connectionHandler.startConnection(commandListener);
+            //commandListener.launch();
+            //connectionHandler.close();
         } catch (NullPointerException e) {
+            e.printStackTrace();
             System.out.println("Good bye");
         }
     }
