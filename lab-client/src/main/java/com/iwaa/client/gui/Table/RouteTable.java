@@ -3,7 +3,6 @@ package com.iwaa.client.gui.Table;
 import com.iwaa.client.gui.AbstractFrame;
 import com.iwaa.client.gui.VisualFrame.GraphicsPanel;
 import com.iwaa.client.gui.VisualFrame.Listener;
-import com.iwaa.client.gui.interimFrames.FabricOfComponents;
 import com.iwaa.client.gui.interimFrames.FilterFrame;
 import com.iwaa.client.gui.interimFrames.AddFrame;
 import com.iwaa.client.gui.interimFrames.InsertFrame;
@@ -22,8 +21,6 @@ import javax.swing.JButton;
 import javax.swing.JMenuBar;
 import javax.swing.Box;
 import javax.swing.JScrollPane;
-import javax.swing.ImageIcon;
-import javax.swing.Icon;
 import javax.swing.JTable;
 import javax.swing.JComponent;
 import javax.swing.JTextArea;
@@ -37,7 +34,6 @@ import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.Image;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
@@ -67,7 +63,6 @@ import static com.iwaa.client.gui.constants.SizeConstants.HELP_TEXT_SIZE;
 import static com.iwaa.client.gui.constants.SizeConstants.STANDART_SQUARE_FRAME_SIZE;
 import static com.iwaa.client.gui.constants.SizeConstants.HELP_HEIGHT_SIZE;
 import static com.iwaa.client.gui.constants.SizeConstants.HELP_WIDTH_SIZE;
-import static com.iwaa.client.gui.constants.SizeConstants.ICON_SIZE;
 import static com.iwaa.client.gui.constants.SizeConstants.INFO_HEIGHT_SIZE;
 import static com.iwaa.client.gui.constants.SizeConstants.INFO_WIDTH_SIZE;
 import static com.iwaa.client.gui.constants.SizeConstants.MAIN_FRAME_HEIGHT;
@@ -82,11 +77,12 @@ import static com.iwaa.client.gui.constants.SizeConstants.TABLE_HEADER_SIZE;
 import static com.iwaa.client.gui.constants.SizeConstants.TABLE_TEXT_SIZE;
 import static com.iwaa.client.gui.constants.SizeConstants.VISUAL_HEIGHT_SIZE;
 import static com.iwaa.client.gui.constants.SizeConstants.VISUAL_WIDTH_SIZE;
+import static com.iwaa.client.gui.interimFrames.FabricOfComponents.setLocationOfComponent;
 import static com.iwaa.client.util.SortFilterLogic.doSort;
 
 public class RouteTable extends AbstractFrame {
 
-    private final Box verticalBox = Box.createVerticalBox();
+    private final JPanel verticalBox = new JPanel();
     private final Box horizontalDownBox = Box.createHorizontalBox();
     private final Box horizontalTopBox = Box.createHorizontalBox();
     private final JButton infoButton = new JButton();
@@ -114,32 +110,44 @@ public class RouteTable extends AbstractFrame {
     }
 
 
-    private void initButton(ImageIcon imageIcon, JButton button, Box box) {
-        Icon icon = new ImageIcon(imageIcon.getImage().getScaledInstance(ICON_SIZE, ICON_SIZE, Image.SCALE_DEFAULT));
-        button.setIcon(icon);
+    private void initButton(String description, JButton button, Box box) {
+        button.setText(description);
+        button.setFont(BUTTON_FONT);
         button.setBackground(Color.ORANGE);
         box.add(button);
     }
 
+    public void initVertical(String description, JButton button) {
+        button.setText(description);
+        button.setFont(BUTTON_FONT);
+        button.setBackground(Color.ORANGE);
+    }
+
     {
+        verticalBox.setLayout(new GridBagLayout());
         sortMistake.setFont(MISTAKE_FONT);
         sortMistake.setForeground(Color.RED);
-        initButton(new ImageIcon("lab-client\\src\\main\\resources\\icons\\informationbutton_83733.png"), infoButton, verticalBox);
-        initButton(new ImageIcon("lab-client\\src\\main\\resources\\icons\\hourglass_icon-icons.com_71171.png"), historyButton, verticalBox);
-        initButton(new ImageIcon("lab-client\\src\\main\\resources\\icons\\add-sign_icon-icons.com_54067.png"), addButton, horizontalDownBox);
-        initButton(new ImageIcon("lab-client\\src\\main\\resources\\icons\\minus-sign-inside-a-black-circle_icon-icons.com_73488.png"), removeButton, horizontalDownBox);
-        initButton(new ImageIcon("lab-client\\src\\main\\resources\\icons\\questionmark_99738.png"), helpButton, verticalBox);
-        initButton(new ImageIcon("lab-client\\src\\main\\resources\\icons\\filter_descending_sort_icon_149476.png"), filterButton, verticalBox);
-        initButton(new ImageIcon("lab-client\\src\\main\\resources\\icons\\group_layer_layers_icon_195089.png"), groupButton, verticalBox);
-        initButton(new ImageIcon("lab-client\\src\\main\\resources\\icons\\print-black-printer-tool-symbol_icon-icons.com_54467.png"), printButton, verticalBox);
-        initButton(new ImageIcon("lab-client\\src\\main\\resources\\icons\\notepad_78910.png"), scriptButton, verticalBox);
-        initButton(new ImageIcon("lab-client\\src\\main\\resources\\icons\\eye_icon-icons.com_71204.png"), viewButton, horizontalDownBox);
-        initButton(new ImageIcon("lab-client\\src\\main\\resources\\icons\\reload_refresh_update_icon_149403.png"), reloadButton, horizontalDownBox);
+        initVertical(localisation(Constants.INFORMATION), infoButton);
+        initVertical(localisation(Constants.HISTORY), historyButton);
+        initButton(localisation(Constants.ADD_BUTTON), addButton, horizontalDownBox);
+        initButton(localisation(Constants.REMOVE), removeButton, horizontalDownBox);
+        initVertical(localisation(Constants.HELP), helpButton);
+        initVertical(localisation(Constants.FILTER), filterButton);
+        initVertical(localisation(Constants.GROUP), groupButton);
+        initVertical(localisation(Constants.SCRIPT), scriptButton);
+        initButton(localisation(Constants.VIEW), viewButton, horizontalDownBox);
+        initButton(localisation(Constants.RELOAD), reloadButton, horizontalDownBox);
         mainJFrame.setSize(new Dimension(MAIN_FRAME_WIDTH, MAIN_FRAME_HEIGHT));
         mainJFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainJFrame.setLocationRelativeTo(null);
         mainJFrame.setLayout(new BorderLayout());
         mainPanel.setLayout(new GridBagLayout());
+        setLocationOfComponent(verticalBox, infoButton, 0, 0);
+        setLocationOfComponent(verticalBox, historyButton, 0, 1);
+        setLocationOfComponent(verticalBox, helpButton, 0, 2);
+        setLocationOfComponent(verticalBox, filterButton, 0, THREE);
+        setLocationOfComponent(verticalBox, groupButton, 0, FOUR);
+        setLocationOfComponent(verticalBox, scriptButton, 0, FIVE);
     }
 
     public void startTable(CommandListener commandListener, String sendedLogin) {
@@ -180,6 +188,20 @@ public class RouteTable extends AbstractFrame {
         mainJFrame.add(mainPanel, BorderLayout.CENTER);
         mainJFrame.add(horizontalTopBox, BorderLayout.NORTH);
         mainJFrame.repaint();
+    }
+
+    private void restartCommands() {
+        horizontalDownBox.removeAll();
+        initVertical(localisation(Constants.INFORMATION), infoButton);
+        initVertical(localisation(Constants.HISTORY), historyButton);
+        initButton(localisation(Constants.ADD_BUTTON), addButton, horizontalDownBox);
+        initButton(localisation(Constants.REMOVE), removeButton, horizontalDownBox);
+        initVertical(localisation(Constants.HELP), helpButton);
+        initVertical(localisation(Constants.FILTER), filterButton);
+        initVertical(localisation(Constants.GROUP), groupButton);
+        initVertical(localisation(Constants.SCRIPT), scriptButton);
+        initButton(localisation(Constants.VIEW), viewButton, horizontalDownBox);
+        initButton(localisation(Constants.RELOAD), reloadButton, horizontalDownBox);
     }
 
     private JTable restartTable(RouteTableModel model) {
@@ -284,9 +306,9 @@ public class RouteTable extends AbstractFrame {
                 executeScriptButton.setFont(BUTTON_FONT);
                 addExecuteScriptButtonListener(executeScriptButton, pathField, scriptPanel, scriptFrame);
                 scriptPanel.setLayout(new GridBagLayout());
-                FabricOfComponents.setLocationOfComponent(scriptPanel, pathLabel, 0, 0);
-                FabricOfComponents.setLocationOfComponent(scriptPanel, pathField, 1, 0);
-                FabricOfComponents.setLocationOfComponent(scriptPanel, executeScriptButton, 1, 1);
+                setLocationOfComponent(scriptPanel, pathLabel, 0, 0);
+                setLocationOfComponent(scriptPanel, pathField, 1, 0);
+                setLocationOfComponent(scriptPanel, executeScriptButton, 1, 1);
                 scriptFrame.add(scriptPanel, BorderLayout.CENTER);
                 scriptFrame.pack();
                 scriptFrame.setResizable(false);
@@ -326,7 +348,7 @@ public class RouteTable extends AbstractFrame {
                     JLabel label = new JLabel(localisation(Constants.MISTAKE_PATH));
                     label.setFont(MISTAKE_FONT);
                     label.setForeground(Color.RED);
-                    FabricOfComponents.setLocationOfComponent(scriptPanel, label, 0, 1);
+                    setLocationOfComponent(scriptPanel, label, 0, 1);
                     frameScript.add(scriptPanel);
                     frameScript.setVisible(true);
                 }
@@ -511,18 +533,18 @@ public class RouteTable extends AbstractFrame {
                 filterSendButton.setBackground(Color.ORANGE);
                 addSortCommandListener(filterFrame, filterPanel, filterSendButton, inequalityList, columnList,
                         mainPanel, "Filter");
-                FabricOfComponents.setLocationOfComponent(filterPanel, columnList.get(0), 0, 0);
-                FabricOfComponents.setLocationOfComponent(filterPanel, columnList.get(1), 0, 1);
-                FabricOfComponents.setLocationOfComponent(filterPanel, columnList.get(2), 0, 2);
-                FabricOfComponents.setLocationOfComponent(filterPanel, columnList.get(THREE), 0, THREE);
-                FabricOfComponents.setLocationOfComponent(filterPanel, columnList.get(FOUR), 0, FOUR);
-                FabricOfComponents.setLocationOfComponent(filterPanel, columnList.get(FIVE), 0, FIVE);
-                FabricOfComponents.setLocationOfComponent(filterPanel, columnList.get(SIX), 0, SIX);
-                FabricOfComponents.setLocationOfComponent(filterPanel, columnList.get(SEVEN), 0, SEVEN);
-                FabricOfComponents.setLocationOfComponent(filterPanel, inequalityList.get(0), 1, THREE);
-                FabricOfComponents.setLocationOfComponent(filterPanel, inequalityList.get(1), 1, FOUR);
-                FabricOfComponents.setLocationOfComponent(filterPanel, inequalityList.get(2), 1, FIVE);
-                FabricOfComponents.setLocationOfComponent(filterPanel, filterSendButton, 1, EIGHT);
+                setLocationOfComponent(filterPanel, columnList.get(0), 0, 0);
+                setLocationOfComponent(filterPanel, columnList.get(1), 0, 1);
+                setLocationOfComponent(filterPanel, columnList.get(2), 0, 2);
+                setLocationOfComponent(filterPanel, columnList.get(THREE), 0, THREE);
+                setLocationOfComponent(filterPanel, columnList.get(FOUR), 0, FOUR);
+                setLocationOfComponent(filterPanel, columnList.get(FIVE), 0, FIVE);
+                setLocationOfComponent(filterPanel, columnList.get(SIX), 0, SIX);
+                setLocationOfComponent(filterPanel, columnList.get(SEVEN), 0, SEVEN);
+                setLocationOfComponent(filterPanel, inequalityList.get(0), 1, THREE);
+                setLocationOfComponent(filterPanel, inequalityList.get(1), 1, FOUR);
+                setLocationOfComponent(filterPanel, inequalityList.get(2), 1, FIVE);
+                setLocationOfComponent(filterPanel, filterSendButton, 1, EIGHT);
                 filterFrame.add(filterPanel, BorderLayout.CENTER);
                 filterFrame.pack();
                 filterFrame.setResizable(false);
@@ -606,17 +628,17 @@ public class RouteTable extends AbstractFrame {
                 sortButton.setBackground(Color.ORANGE);
                 addSortCommandListener(sortFrame, sortPanel, sortButton, orderList, columnList,
                         mainPanel, "Sort");
-                FabricOfComponents.setLocationOfComponent(sortPanel, columnList.get(0), 0, 0);
-                FabricOfComponents.setLocationOfComponent(sortPanel, columnList.get(1), 0, 1);
-                FabricOfComponents.setLocationOfComponent(sortPanel, columnList.get(2), 0, 2);
-                FabricOfComponents.setLocationOfComponent(sortPanel, columnList.get(THREE), 0, THREE);
-                FabricOfComponents.setLocationOfComponent(sortPanel, columnList.get(FOUR), 0, FOUR);
-                FabricOfComponents.setLocationOfComponent(sortPanel, columnList.get(FIVE), 0, FIVE);
-                FabricOfComponents.setLocationOfComponent(sortPanel, columnList.get(SIX), 0, SIX);
-                FabricOfComponents.setLocationOfComponent(sortPanel, columnList.get(SEVEN), 0, SEVEN);
-                FabricOfComponents.setLocationOfComponent(sortPanel, orderList.get(0), 1, THREE);
-                FabricOfComponents.setLocationOfComponent(sortPanel, orderList.get(1), 1, FOUR);
-                FabricOfComponents.setLocationOfComponent(sortPanel, sortButton, 1, EIGHT);
+                setLocationOfComponent(sortPanel, columnList.get(0), 0, 0);
+                setLocationOfComponent(sortPanel, columnList.get(1), 0, 1);
+                setLocationOfComponent(sortPanel, columnList.get(2), 0, 2);
+                setLocationOfComponent(sortPanel, columnList.get(THREE), 0, THREE);
+                setLocationOfComponent(sortPanel, columnList.get(FOUR), 0, FOUR);
+                setLocationOfComponent(sortPanel, columnList.get(FIVE), 0, FIVE);
+                setLocationOfComponent(sortPanel, columnList.get(SIX), 0, SIX);
+                setLocationOfComponent(sortPanel, columnList.get(SEVEN), 0, SEVEN);
+                setLocationOfComponent(sortPanel, orderList.get(0), 1, THREE);
+                setLocationOfComponent(sortPanel, orderList.get(1), 1, FOUR);
+                setLocationOfComponent(sortPanel, sortButton, 1, EIGHT);
 
                 sortFrame.add(sortPanel, BorderLayout.CENTER);
                 sortFrame.pack();
@@ -659,7 +681,7 @@ public class RouteTable extends AbstractFrame {
                         sortFilterLogic.doFilter(nameOfColumn, nameOfOrder, commandListenerForTable, routeTableModel, panel, mainJFrame, jScrollPane);
                     }
                 } else {
-                    FabricOfComponents.setLocationOfComponent(sortFilterPanel, sortMistake, 0, EIGHT);
+                    setLocationOfComponent(sortFilterPanel, sortMistake, 0, EIGHT);
                     sortFilterFrame.add(sortFilterPanel, BorderLayout.CENTER);
                     sortFilterFrame.setVisible(true);
                 }

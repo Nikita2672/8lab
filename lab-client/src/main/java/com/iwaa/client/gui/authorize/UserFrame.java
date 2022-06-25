@@ -89,14 +89,23 @@ public class UserFrame extends AbstractFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    System.out.println("1");
                     String login = loginField.getText();
+                    System.out.println("2");
                     String password = passwordField.getText();
+                    System.out.println("3");
                     CommandResult result = commandListener.runUser(login, password, "sign_in");
+                    System.out.println("4");
                     if (result.isSuccess()) {
+                        System.out.println("5");
                         userMainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                        System.out.println("6");
                         userMainFrame.dispose();
+                        System.out.println("6");
                         RouteTable routeTable = new RouteTable(getResourceBundle());
+                        System.out.println("8");
                         routeTable.startTable(commandListener, login);
+                        System.out.println("9");
                     } else {
                         JLabel mistakeUserLabel = new JLabel(localisation(Constants.MISTAKE_USER));
                         mistakeUserLabel.setFont(MISTAKE_FONT);

@@ -89,7 +89,16 @@ public enum Constants {
     EXECUTE_SCRIPT_WINDOW("execute_script_window"),
     PATH("path"),
     EXECUTE("execute"),
-    MISTAKE_PATH("mistake_path");
+    MISTAKE_PATH("mistake_path"),
+
+    INFORMATION("information"),
+    HISTORY("history"),
+    HELP("help"),
+    FILTER("filter"),
+    GROUP("group"),
+    SCRIPT("script"),
+    VIEW("view"),
+    RELOAD("reload");
 
 
     private final String string;
