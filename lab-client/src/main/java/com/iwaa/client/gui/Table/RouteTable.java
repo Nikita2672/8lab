@@ -82,7 +82,7 @@ import static com.iwaa.client.util.SortFilterLogic.doSort;
 
 public class RouteTable extends AbstractFrame {
 
-    private final JPanel verticalBox = new JPanel();
+    private final JPanel verticalPanel = new JPanel();
     private final Box horizontalDownBox = Box.createHorizontalBox();
     private final Box horizontalTopBox = Box.createHorizontalBox();
     private final JButton infoButton = new JButton();
@@ -124,7 +124,7 @@ public class RouteTable extends AbstractFrame {
     }
 
     {
-        verticalBox.setLayout(new GridBagLayout());
+        verticalPanel.setLayout(new GridBagLayout());
         sortMistake.setFont(MISTAKE_FONT);
         sortMistake.setForeground(Color.RED);
         initVertical(localisation(Constants.INFORMATION), infoButton);
@@ -142,19 +142,19 @@ public class RouteTable extends AbstractFrame {
         mainJFrame.setLocationRelativeTo(null);
         mainJFrame.setLayout(new BorderLayout());
         mainPanel.setLayout(new GridBagLayout());
-        setLocationOfComponent(verticalBox, infoButton, 0, 0);
-        setLocationOfComponent(verticalBox, historyButton, 0, 1);
-        setLocationOfComponent(verticalBox, helpButton, 0, 2);
-        setLocationOfComponent(verticalBox, filterButton, 0, THREE);
-        setLocationOfComponent(verticalBox, groupButton, 0, FOUR);
-        setLocationOfComponent(verticalBox, scriptButton, 0, FIVE);
+        setLocationOfComponent(verticalPanel, infoButton, 0, 0);
+        setLocationOfComponent(verticalPanel, historyButton, 0, 1);
+        setLocationOfComponent(verticalPanel, helpButton, 0, 2);
+        setLocationOfComponent(verticalPanel, filterButton, 0, THREE);
+        setLocationOfComponent(verticalPanel, groupButton, 0, FOUR);
+        setLocationOfComponent(verticalPanel, scriptButton, 0, FIVE);
     }
 
     public void startTable(CommandListener commandListener, String sendedLogin) {
         this.login = sendedLogin;
         this.commandListenerForTable = commandListener;
         createPanel();
-        mainJFrame.add(verticalBox, BorderLayout.LINE_END);
+        mainJFrame.add(verticalPanel, BorderLayout.LINE_END);
         mainJFrame.add(horizontalDownBox, BorderLayout.SOUTH);
         addListeners();
         mainJFrame.setVisible(true);
@@ -185,6 +185,9 @@ public class RouteTable extends AbstractFrame {
         addSorListener(sortButton);
         addSorFilterListener(sortFilterButton);
         restartPanel();
+        restartCommands();
+        mainJFrame.add(verticalPanel, BorderLayout.LINE_END);
+        mainJFrame.add(horizontalDownBox, BorderLayout.SOUTH);
         mainJFrame.add(mainPanel, BorderLayout.CENTER);
         mainJFrame.add(horizontalTopBox, BorderLayout.NORTH);
         mainJFrame.repaint();
@@ -192,6 +195,7 @@ public class RouteTable extends AbstractFrame {
 
     private void restartCommands() {
         horizontalDownBox.removeAll();
+        verticalPanel.removeAll();
         initVertical(localisation(Constants.INFORMATION), infoButton);
         initVertical(localisation(Constants.HISTORY), historyButton);
         initButton(localisation(Constants.ADD_BUTTON), addButton, horizontalDownBox);
@@ -202,6 +206,12 @@ public class RouteTable extends AbstractFrame {
         initVertical(localisation(Constants.SCRIPT), scriptButton);
         initButton(localisation(Constants.VIEW), viewButton, horizontalDownBox);
         initButton(localisation(Constants.RELOAD), reloadButton, horizontalDownBox);
+        setLocationOfComponent(verticalPanel, infoButton, 0, 0);
+        setLocationOfComponent(verticalPanel, historyButton, 0, 1);
+        setLocationOfComponent(verticalPanel, helpButton, 0, 2);
+        setLocationOfComponent(verticalPanel, filterButton, 0, THREE);
+        setLocationOfComponent(verticalPanel, groupButton, 0, FOUR);
+        setLocationOfComponent(verticalPanel, scriptButton, 0, FIVE);
     }
 
     private JTable restartTable(RouteTableModel model) {
